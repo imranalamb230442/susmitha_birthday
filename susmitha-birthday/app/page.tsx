@@ -869,9 +869,14 @@ function SceneTwo({ onContinue }: { onContinue: () => void }) {
    SCENE 3 — NEXT DESTINATION / INTERACTIVE MISSION
 ───────────────────────────────────────────── */
 
-type MissionObject = "earth" | "moon" | "mars" | "satellite" | "asteroid" | "ship";
+type MissionObject = "isro" | "earth" | "moon" | "mars" | "satellite" | "asteroid" | "ship";
 
 const missionContent: Record<MissionObject, { label: string; title: string; text: string }> = {
+  isro: {
+    label: "ORIGIN / ISRO · INDIA",
+    title: "WHERE OUR ORBITS FIRST CROSSED",
+    text: "Of all the places we could have met, we met where people dream about reaching the stars — ISRO.",
+  },
   earth: {
     label: "ORIGIN / EARTH",
     title: "EVERY JOURNEY NEEDS A HOME",
@@ -903,6 +908,85 @@ const missionContent: Record<MissionObject, { label: string; title: string; text
     text: "The destination is still unfolding. All that matters now is enjoying the journey.",
   },
 };
+
+function MissionOriginStation({
+  active,
+  onSelect,
+}: {
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const ref = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime();
+    ref.current.rotation.y = Math.sin(t * 0.35) * 0.12;
+    const pulse = 1 + Math.sin(t * 2.4) * (active ? 0.055 : 0.025);
+    ref.current.scale.lerp(new THREE.Vector3(pulse, pulse, pulse), 0.08);
+  });
+
+  return (
+    <group
+      ref={ref}
+      position={[-1.1, -1.25, 0.2]}
+      onClick={(event) => { event.stopPropagation(); onSelect(); }}
+      onPointerOver={(event) => { event.stopPropagation(); document.body.style.cursor = "pointer"; }}
+      onPointerOut={() => { document.body.style.cursor = "default"; }}
+    >
+      <mesh position={[0, -0.15, 0]}>
+        <cylinderGeometry args={[0.72, 0.82, 0.16, 48]} />
+        <meshStandardMaterial color="#17151f" metalness={0.8} roughness={0.28} />
+      </mesh>
+      <mesh position={[0, 0.25, 0]}>
+        <boxGeometry args={[0.75, 0.5, 0.52]} />
+        <meshStandardMaterial color="#d9d2dc" metalness={0.35} roughness={0.45} />
+      </mesh>
+      <mesh position={[0, 0.43, 0.27]}>
+        <boxGeometry args={[0.72, 0.035, 0.012]} />
+        <meshBasicMaterial color="#e88952" />
+      </mesh>
+      <mesh position={[0, 0.39, 0.27]}>
+        <boxGeometry args={[0.72, 0.035, 0.012]} />
+        <meshBasicMaterial color="#f4f1e9" />
+      </mesh>
+      <mesh position={[0, 0.35, 0.27]}>
+        <boxGeometry args={[0.72, 0.035, 0.012]} />
+        <meshBasicMaterial color="#78a98a" />
+      </mesh>
+      <group position={[0, 0.72, 0]}>
+        <mesh rotation={[0.25, 0, 0]}>
+          <sphereGeometry args={[0.38, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color="#eeeaf3" metalness={0.65} roughness={0.25} side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[0, 0.22, 0.08]} rotation={[Math.PI / 2, 0, 0]}>
+          <sphereGeometry args={[0.055, 20, 20]} />
+          <meshStandardMaterial color="#f1d18b" emissive="#f1b75a" emissiveIntensity={1.4} />
+        </mesh>
+      </group>
+      <mesh position={[0, 1.18, 0]}>
+        <cylinderGeometry args={[0.018, 0.018, 0.55, 12]} />
+        <meshStandardMaterial color="#bcb4c8" metalness={0.8} roughness={0.25} />
+      </mesh>
+      <mesh position={[0, 1.48, 0]}>
+        <sphereGeometry args={[0.045, 20, 20]} />
+        <meshStandardMaterial
+          color={active ? "#f5d27d" : "#8f79b6"}
+          emissive={active ? "#f5b84b" : "#70539d"}
+          emissiveIntensity={active ? 4 : 1.4}
+        />
+      </mesh>
+      <mesh scale={active ? 2.8 : 2}>
+        <sphereGeometry args={[0.22, 24, 24]} />
+        <meshBasicMaterial color="#d9b77b" transparent opacity={active ? 0.1 : 0.035} />
+      </mesh>
+      <mesh rotation={[Math.PI / 2.5, 0.2, 0]}>
+        <torusGeometry args={[0.95, 0.012, 12, 100]} />
+        <meshBasicMaterial color="#d9b77b" transparent opacity={active ? 0.6 : 0.25} />
+      </mesh>
+    </group>
+  );
+}
 
 function MissionPlanet({
   type,
@@ -1058,6 +1142,7 @@ function MissionAsteroid({ active, onSelect }: { active: boolean; onSelect: () =
 function MissionSpacecraft({ selected, onSelect }: { selected: MissionObject; onSelect: () => void }) {
   const ship = useRef<THREE.Group>(null);
   const targets: Record<MissionObject, [number, number]> = {
+    isro: [-0.2, -0.4],
     earth: [-2.8, -0.45],
     moon: [0.0, 0.65],
     mars: [2.7, -0.25],
@@ -1115,6 +1200,11 @@ function DestinationWorld({ selected, onSelect }: { selected: MissionObject; onS
         <meshBasicMaterial color="#c9b7ff" transparent opacity={0.16} />
       </mesh>
 
+      <MissionOriginStation
+        active={selected === "isro"}
+        onSelect={() => onSelect("isro")}
+      />
+
       <MissionPlanet type="earth" position={[-3.0, -0.45, 0]} active={selected === "earth"} onSelect={() => onSelect("earth")} />
       <MissionPlanet type="moon" position={[0, 1.0, 0]} active={selected === "moon"} onSelect={() => onSelect("moon")} />
       <MissionPlanet type="mars" position={[3.0, -0.2, 0]} active={selected === "mars"} onSelect={() => onSelect("mars")} />
@@ -1126,7 +1216,8 @@ function DestinationWorld({ selected, onSelect }: { selected: MissionObject; onS
 }
 
 function SceneThree() {
-  const [selected, setSelected] = useState<MissionObject>("earth");
+  const [selected, setSelected] = useState<MissionObject>("isro");
+  const [originOpened, setOriginOpened] = useState(false);
   const content = missionContent[selected];
 
   return (
@@ -1141,14 +1232,22 @@ function SceneThree() {
       </header>
 
       <section className="destination-copy destination-explorer-copy">
-        <span>✦ CHOOSE YOUR NEXT STOP ✦</span>
-        <h2>THE<br /><em>JOURNEY</em><br />AHEAD.</h2>
-        <p>There is more than one way forward. Explore the objects around the spacecraft.</p>
+        <span>{selected === "isro" ? "✦ MISSION ORIGIN · INDIA ✦" : "✦ CHOOSE YOUR NEXT STOP ✦"}</span>
+        <h2>
+          {selected === "isro" ? <>WHERE<br /><em>WE</em><br />MET.</> : <>THE<br /><em>JOURNEY</em><br />AHEAD.</>}
+        </h2>
+        <p>
+          {selected === "isro"
+            ? "Before the next destination, remember where this mission really began."
+            : "There is more than one way forward. Explore the objects around the spacecraft."}
+        </p>
       </section>
 
       <div className="destination-instruction">
         <span className="destination-instruction-dot" />
-        CLICK DIFFERENT OBJECTS TO EXPLORE
+        {selected === "isro"
+          ? "CLICK THE ISRO ORIGIN TO REVISIT THE FIRST MEETING"
+          : "CLICK DIFFERENT OBJECTS TO EXPLORE"}
       </div>
 
       <div className="destination-canvas destination-explorer-canvas">
@@ -1164,13 +1263,54 @@ function SceneThree() {
       </motion.div>
 
       <div className="destination-object-list">
-        {(["earth", "moon", "mars", "satellite", "asteroid", "ship"] as MissionObject[]).map((item, index) => (
+        {(["isro", "earth", "moon", "mars", "satellite", "asteroid", "ship"] as MissionObject[]).map((item, index) => (
           <button key={item} className={selected === item ? "active" : ""} onClick={() => setSelected(item)}>
             <span>0{index + 1}</span>
-            {item === "satellite" ? "SATELLITE" : item === "asteroid" ? "ASTEROID" : item.toUpperCase()}
+            {item === "isro" ? "ISRO" : item === "satellite" ? "SATELLITE" : item === "asteroid" ? "ASTEROID" : item.toUpperCase()}
           </button>
         ))}
       </div>
+
+      <AnimatePresence>
+        {originOpened && (
+          <motion.div
+            className="isro-memory-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOriginOpened(false)}
+          >
+            <motion.div
+              className="isro-memory-card"
+              initial={{ opacity: 0, scale: 0.88, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.5 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="isro-memory-topline">
+                <span>FIRST CONTACT</span>
+                <span>ISRO · INDIA</span>
+              </div>
+              <div className="isro-memory-symbol">✦</div>
+              <h3>
+                WHERE OUR<br />
+                <em>ORBITS</em><br />
+                FIRST CROSSED
+              </h3>
+              <p>
+                Of all the places we could have met, we met where people dream
+                about reaching the stars.
+              </p>
+              <div className="isro-memory-line" />
+              <span className="isro-memory-note">A MEMORY FROM THE BEGINNING</span>
+              <button onClick={() => setOriginOpened(false)}>
+                RETURN TO ORBIT →
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="destination-footer">
         <span>03 / 07</span>
