@@ -738,8 +738,21 @@ function ZeroGBirthdayCake({ wished, onWish }: { wished: boolean; onWish: () => 
   );
 }
 
-function SceneTwo({ onContinue }: { onContinue: () => void }) {
+function SceneTwo({
+  onContinue,
+  onBirthdayStart,
+}: {
+  onContinue: () => void;
+  onBirthdayStart: () => void;
+}) {
   const [wished, setWished] = useState(false);
+
+  const handleWish = () => {
+    if (wished) return;
+
+    setWished(true);
+    onBirthdayStart();
+  };
 
   return (
     <motion.main
@@ -805,7 +818,7 @@ function SceneTwo({ onContinue }: { onContinue: () => void }) {
         <div className="birthday-orbit-path birthday-orbit-path-two" />
         <div className="birthday-orbit-center-star">✦</div>
 
-        <ZeroGBirthdayCake wished={wished} onWish={() => setWished(true)} />
+        <ZeroGBirthdayCake wished={wished} onWish={handleWish} />
 
         {!wished && (
           <div className="birthday-cake-prompt">
@@ -1254,40 +1267,56 @@ type MemoryItem = {
   title: string;
   caption: string;
   image: string;
-  position: string;
 };
 
 const memoryItems: MemoryItem[] = [
-  { id: 1, number: "01", title: "THE FIRST FRAME", caption: "Some memories begin before you realise they will matter.", image: "/memories/memory-01.jpg", position: "memory-card-one" },
-  { id: 2, number: "02", title: "A DAY TO REMEMBER", caption: "A little moment, captured and saved beyond the timeline.", image: "/memories/memory-02.jpg", position: "memory-card-two" },
-  { id: 3, number: "03", title: "OUTSIDE THE ORBIT", caption: "Different places. Different skies. Still part of the same journey.", image: "/memories/memory-03.jpg", position: "memory-card-three" },
-  { id: 4, number: "04", title: "THE LITTLE THINGS", caption: "The random moments somehow become the ones you remember most.", image: "/memories/memory-04.jpg", position: "memory-card-four" },
-  { id: 5, number: "05", title: "ANOTHER MEMORY", caption: "A frame from somewhere along the way.", image: "/memories/memory-05.jpg", position: "memory-card-five" },
-  { id: 6, number: "06", title: "STILL IN ORBIT", caption: "Some memories don't really leave. They just keep orbiting.", image: "/memories/memory-06.jpg", position: "memory-card-six" },
+  {
+    id: 1,
+    number: "01",
+    title: "THE FIRST FRAME",
+    caption: "Some memories begin before you realise they will matter.",
+    image: "/memories/memory-01.jpeg",
+  },
+  {
+    id: 2,
+    number: "02",
+    title: "A DAY TO REMEMBER",
+    caption: "A little moment, captured and saved beyond the timeline.",
+    image: "/memories/memory-02.jpeg",
+  },
+  {
+    id: 3,
+    number: "03",
+    title: "OUTSIDE THE ORBIT",
+    caption: "Different places. Different skies. Still part of the same journey.",
+    image: "/memories/memory-03.jpeg",
+  },
+  {
+    id: 4,
+    number: "04",
+    title: "THE LITTLE THINGS",
+    caption: "The random moments somehow become the ones you remember most.",
+    image: "/memories/memory-04.jpeg",
+  },
+  {
+    id: 5,
+    number: "05",
+    title: "ANOTHER MEMORY",
+    caption: "A frame from somewhere along the way.",
+    image: "/memories/memory-05.jpeg",
+  },
+  {
+    id: 6,
+    number: "06",
+    title: "STILL IN ORBIT",
+    caption: "Some memories don't really leave. They just keep orbiting.",
+    image: "/memories/memory-06.jpeg",
+  },
 ];
-
-function MemoryCard({ item, active, onSelect }: { item: MemoryItem; active: boolean; onSelect: () => void }) {
-  return (
-    <motion.button
-      type="button"
-      className={`memory-card ${item.position} ${active ? "memory-card--active" : ""}`}
-      onClick={onSelect}
-      whileTap={{ scale: 0.97 }}
-      aria-label={`Open memory ${item.number}: ${item.title}`}
-    >
-      <span className="memory-card-glow" />
-      <span className="memory-card-image">
-        <img src={item.image} alt="" onError={(event) => { event.currentTarget.style.opacity = "0"; }} />
-        <span className="memory-image-placeholder">ADD PHOTO</span>
-      </span>
-      <span className="memory-card-top"><b>{item.number}</b><i>ARCHIVE</i></span>
-      <span className="memory-card-bottom">{item.title}</span>
-    </motion.button>
-  );
-}
 
 function MemoryArchiveWorld() {
   const ref = useRef<THREE.Group>(null);
+
   useFrame(({ clock }) => {
     if (!ref.current) return;
     ref.current.rotation.y = Math.sin(clock.getElapsedTime() * 0.18) * 0.025;
@@ -1301,23 +1330,39 @@ function MemoryArchiveWorld() {
       <pointLight position={[-4, -2, 3]} intensity={4} color="#e8a9c8" />
       <pointLight position={[0, 2, -4]} intensity={3} color="#f3d18a" />
       <StarField />
+
       <group ref={ref}>
         <mesh rotation={[0.55, 0.2, 0.1]}>
           <torusGeometry args={[2.65, 0.012, 12, 180]} />
           <meshBasicMaterial color="#d9b77b" transparent opacity={0.3} />
         </mesh>
+
         <mesh rotation={[1.15, -0.3, 0.2]}>
           <torusGeometry args={[3.25, 0.008, 12, 180]} />
           <meshBasicMaterial color="#c9b7ff" transparent opacity={0.18} />
         </mesh>
+
         <mesh>
           <sphereGeometry args={[0.5, 48, 48]} />
-          <meshStandardMaterial color="#241844" emissive="#120b29" emissiveIntensity={0.9} metalness={0.25} roughness={0.5} />
+          <meshStandardMaterial
+            color="#241844"
+            emissive="#120b29"
+            emissiveIntensity={0.9}
+            metalness={0.25}
+            roughness={0.5}
+          />
         </mesh>
+
         <mesh scale={1.35}>
           <sphereGeometry args={[0.5, 32, 32]} />
-          <meshBasicMaterial color="#c9b7ff" transparent opacity={0.07} side={THREE.BackSide} />
+          <meshBasicMaterial
+            color="#c9b7ff"
+            transparent
+            opacity={0.07}
+            side={THREE.BackSide}
+          />
         </mesh>
+
         <Float speed={0.8} floatIntensity={0.25} rotationIntensity={0.15}>
           <Flower position={[-0.5, 0.38, 0.55]} scale={0.48} />
           <Flower position={[0.48, -0.34, 0.55]} scale={0.38} />
@@ -1328,62 +1373,458 @@ function MemoryArchiveWorld() {
 }
 
 function SceneFour({ onContinue }: { onContinue: () => void }) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const current = selected ? memoryItems.find((item) => item.id === selected) : null;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  const current = memoryItems[currentIndex];
+
+  const goNext = () => {
+    if (currentIndex === memoryItems.length - 1) {
+      onContinue();
+      return;
+    }
+    setDirection(1);
+    setCurrentIndex((index) => index + 1);
+  };
+
+  const goPrevious = () => {
+    setDirection(-1);
+    setCurrentIndex(
+      (index) => (index - 1 + memoryItems.length) % memoryItems.length
+    );
+  };
 
   return (
-    <motion.main className="memory-archive-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
+    <motion.main
+      className="memory-archive-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+    >
       <div className="memory-archive-nebula memory-archive-nebula-one" />
       <div className="memory-archive-nebula memory-archive-nebula-two" />
+
       <div className="memory-archive-stars" aria-hidden="true">
         {Array.from({ length: 70 }).map((_, index) => (
-          <span key={index} style={{ left: `${(index * 47.3) % 100}%`, top: `${(index * 71.1) % 100}%`, animationDelay: `${(index % 8) * 0.5}s` }} />
+          <span
+            key={index}
+            style={{
+              left: `${(index * 47.3) % 100}%`,
+              top: `${(index * 71.1) % 100}%`,
+              animationDelay: `${(index % 8) * 0.5}s`,
+            }}
+          />
         ))}
       </div>
 
       <header className="memory-archive-header">
-        <div><span /> MISSION 04 / MEMORY ARCHIVE</div>
+        <div>
+          <span /> MISSION 04 / MEMORY ARCHIVE
+        </div>
         <strong>SUS-04</strong>
-        <div>{selected ? "MEMORY OPEN" : "ARCHIVE ONLINE"}</div>
+        <div>MEMORY {current.number} / {memoryItems.length}</div>
       </header>
 
-      <section className="memory-archive-intro">
-        <span>✦ PERSONAL ARCHIVE / VISUAL MEMORY ✦</span>
-        <h2>THE MOMENTS<br /><em>WE KEEP.</em></h2>
-        <p>Some moments are too good to leave behind. Tap a frame and bring it back into focus.</p>
+      <section className="memory-carousel-intro">
+        <span>✦ A FEW LITTLE MEMORIES ✦</span>
+        <h2>
+          Moments worth
+          <br />
+          <em>remembering.</em>
+        </h2>
+        <p>Some moments, some smiles, one little collection. ♡</p>
       </section>
 
       <div className="memory-archive-canvas">
-        <Canvas camera={{ position: [0, 0, 7.5], fov: 42 }} dpr={[1, 1.6]} gl={{ antialias: true, alpha: true }}>
+        <Canvas
+          camera={{ position: [0, 0, 7.5], fov: 42 }}
+          dpr={[1, 1.6]}
+          gl={{ antialias: true, alpha: true }}
+        >
           <MemoryArchiveWorld />
         </Canvas>
       </div>
 
-      <div className="memory-orbit-line memory-orbit-line-one" />
-      <div className="memory-orbit-line memory-orbit-line-two" />
+      <div className="memory-carousel-orbit memory-carousel-orbit-one" />
+      <div className="memory-carousel-orbit memory-carousel-orbit-two" />
 
-      <div className="memory-card-field">
-        {memoryItems.map((item) => <MemoryCard key={item.id} item={item} active={selected === item.id} onSelect={() => setSelected(item.id)} />)}
+      <div className="memory-side-flower memory-side-flower-left" aria-hidden="true">
+        <span />
+      </div>
+      <div className="memory-side-flower memory-side-flower-right" aria-hidden="true">
+        <span />
       </div>
 
-      <AnimatePresence>
-        {current && (
-          <motion.div className="memory-detail" initial={{ opacity: 0, y: 25, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15 }}>
-            <button className="memory-detail-close" type="button" onClick={() => setSelected(null)}>×</button>
-            <span>MEMORY {current.number} / ARCHIVED FRAME</span>
-            <h3>{current.title}</h3>
-            <p>{current.caption}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <section className="memory-carousel-stage" aria-live="polite">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.article
+            key={current.id}
+            className="memory-photo-card"
+            custom={direction}
+            initial={{
+              opacity: 0,
+              x: direction * 80,
+              rotate: direction * 2,
+              scale: 0.97,
+            }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              rotate: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              x: direction * -80,
+              rotate: direction * -2,
+              scale: 0.97,
+            }}
+            transition={{
+              duration: 0.48,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            <div className="memory-photo-frame">
+              <img
+                src={current.image}
+                alt={current.title}
+                onError={(event) => {
+                  event.currentTarget.style.opacity = "0";
+                }}
+              />
+              <div className="memory-photo-placeholder">ADD PHOTO</div>
+            </div>
 
-      <div className="memory-archive-hint">{selected ? "FRAME LOCKED / MEMORY RESTORED" : "SELECT A MEMORY FRAME"}</div>
+            <div className="memory-photo-info">
+              <span className="memory-photo-index">
+                ✦ {current.number} / {String(memoryItems.length).padStart(2, "0")} ✦
+              </span>
+              <h3>{current.title}</h3>
+              <p>{current.caption}</p>
+            </div>
+          </motion.article>
+        </AnimatePresence>
 
-      <motion.button className="memory-next-button" type="button" onClick={onContinue} whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-        <span>OPEN THE TRANSMISSION</span><b>→</b>
+        <div className="memory-carousel-controls">
+          <button
+            type="button"
+            className="memory-carousel-arrow"
+            onClick={goPrevious}
+            aria-label="Previous memory"
+          >
+            ←
+          </button>
+
+          <div className="memory-carousel-dots" aria-label="Memory navigation">
+            {memoryItems.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                className={index === currentIndex ? "active" : ""}
+                onClick={() => {
+                  setDirection(index > currentIndex ? 1 : -1);
+                  setCurrentIndex(index);
+                }}
+                aria-label={`Open memory ${item.number}`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="memory-carousel-arrow"
+            onClick={goNext}
+            aria-label="Next memory"
+          >
+            →
+          </button>
+        </div>
+
+        <span className="memory-carousel-hint">
+          TAP THE ARROWS TO EXPLORE ✦
+        </span>
+      </section>
+
+      <motion.button
+        className="memory-next-button"
+        type="button"
+        onClick={onContinue}
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.97 }}
+      >
+        <span>OPEN THE TRANSMISSION</span>
+        <b>→</b>
       </motion.button>
 
-      <div className="memory-archive-footer"><span>04 / 07</span><div><b className="active" /><b /><b /><b /><b /><b /><b /></div><span>MEMORY ARCHIVE / PERSONAL LOG</span></div>
+      <div className="memory-archive-footer">
+        <span>04 / 07</span>
+        <div>
+          <b className="active" />
+          <b />
+          <b />
+          <b />
+          <b />
+          <b />
+          <b />
+        </div>
+        <span>MEMORY ARCHIVE / PERSONAL LOG</span>
+      </div>
+    </motion.main>
+  );
+}
+
+
+/* ─────────────────────────────────────────────
+   SCENE 5 — THE LETTER
+───────────────────────────────────────────── */
+
+function SceneFive({ onContinue }: { onContinue: () => void }) {
+  return (
+    <motion.main
+      className="letter-scene"
+      initial={{ opacity: 0, scale: 1.02 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.8 }}
+    >
+      <div className="letter-stars" aria-hidden="true">
+        {Array.from({ length: 34 }).map((_, index) => (
+          <span
+            key={index}
+            style={{
+              left: `${(index * 37.7) % 100}%`,
+              top: `${(index * 61.3) % 100}%`,
+              animationDelay: `${(index % 7) * 0.45}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="letter-orbit letter-orbit-one" />
+      <div className="letter-orbit letter-orbit-two" />
+
+      <div className="letter-spacecraft" aria-hidden="true">
+        <div className="spacecraft-body" />
+        <div className="spacecraft-wing left" />
+        <div className="spacecraft-wing right" />
+        <div className="spacecraft-window" />
+        <div className="spacecraft-flame" />
+      </div>
+
+      <section className="letter-content">
+        <div className="letter-kicker">TRANSMISSION 05 / PERSONAL SIGNAL</div>
+
+        <h1 className="letter-title">
+          A LETTER
+          <span>ACROSS THE STARS</span>
+        </h1>
+
+        <div className="letter-subtitle">
+          A message from my side of the orbit
+        </div>
+
+        <article className="letter-card">
+          <div className="letter-card-header">
+            <div>
+              <span className="letter-label">TO</span>
+              <strong>SUSMITHA</strong>
+            </div>
+            <div className="letter-signal">
+              <span className="signal-dot" />
+              TRANSMISSION RECEIVED
+            </div>
+          </div>
+
+          <div className="letter-divider" />
+
+          <div className="letter-body">
+            <p>
+              Sometimes, the best friendships begin in the most unexpected places.
+            </p>
+
+            <p>
+              When I first met you at <strong>ISRO</strong>, I never imagined that
+              a simple meeting there would eventually turn into such a beautiful
+              friendship. We came from different places, and one of the funniest
+              challenges between us was definitely the <strong>language barrier</strong>. 😄
+            </p>
+
+            <p>
+              At first, communicating wasn't always easy. Sometimes we had to
+              repeat things, explain them differently, or simply understand each
+              other through expressions and gestures. But somehow, that barrier
+              never stopped us from becoming friends.
+            </p>
+
+            <p>
+              From our conversations and random laughs to visiting different
+              places and spending time together, those little moments slowly
+              became memories that I'll always be happy to remember.
+            </p>
+
+            <p>
+              Looking back, it's amazing how unexpectedly a friendship can grow.
+              We didn't need to have everything in common. We simply enjoyed our
+              time together, explored new places, and created memories along the way.
+            </p>
+
+            <p>
+              As you step into another year of your life, I genuinely hope you
+              achieve everything you dream of in your <strong>career and future</strong>.
+              May you become an amazing <strong>aerospace engineer</strong>, keep learning,
+              keep exploring, and reach every goal you have set for yourself.
+            </p>
+
+            <p>
+              I really hope that you get the opportunity to work with an incredible
+              aerospace company like <strong>Boeing, Airbus, or even SpaceX</strong> as
+              soon as possible. And honestly, when that happens, I hope I get to
+              visit you there someday with a big smile on my face. 😄🚀
+            </p>
+
+            <p>
+              May you find amazing opportunities, meet people who inspire you,
+              and accomplish things that make you truly proud.
+            </p>
+
+            <p>
+              May your future be brighter than you imagine, your career more
+              successful than you expect, and your life filled with beautiful
+              places, experiences, and memories.
+            </p>
+
+            <p className="letter-highlight">
+              <strong>Keep dreaming.</strong>
+              <br />
+              <strong>Keep growing.</strong>
+              <br />
+              <strong>Keep exploring.</strong>
+            </p>
+
+            <p>
+              And most importantly, <strong>keep being yourself.</strong>
+            </p>
+
+            <p>
+              I'm really glad our paths crossed at ISRO, and even more glad that
+              somewhere along the way, that meeting turned into a friendship.
+            </p>
+
+            <p className="letter-ending">
+              <strong>
+                Wishing you an amazing year ahead and an even more amazing journey ahead of that.
+              </strong>
+            </p>
+
+            <div className="letter-signature">
+              <span>With warm wishes,</span>
+              <strong>Imran Alam</strong>
+              <span className="signature-heart">🤍</span>
+            </div>
+          </div>
+        </article>
+
+        <motion.button
+          type="button"
+          className="letter-next-button"
+          onClick={onContinue}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <span>NEXT DESTINATION</span>
+          <span className="letter-arrow">→</span>
+        </motion.button>
+      </section>
+    </motion.main>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   SCENE 6 — MISSION SUCCESSFUL
+───────────────────────────────────────────── */
+
+function SceneSix() {
+  return (
+    <motion.main
+      className="mission-success-scene"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.1 }}
+    >
+      <div className="mission-success-stars" aria-hidden="true">
+        {Array.from({ length: 42 }).map((_, index) => (
+          <span
+            key={index}
+            style={{
+              left: `${(index * 47.3) % 100}%`,
+              top: `${(index * 71.7) % 100}%`,
+              animationDelay: `${(index % 8) * 0.4}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="mission-success-orbit mission-success-orbit-one" />
+      <div className="mission-success-orbit mission-success-orbit-two" />
+
+      <motion.div
+        className="mission-success-center"
+        initial={{ scale: 0.72, opacity: 0, y: 22 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="mission-success-eyebrow">
+          BIRTHDAY MISSION / SUS-01
+        </div>
+
+        <div className="mission-success-emblem">
+          <span className="mission-success-core">✦</span>
+          <span className="mission-success-ring ring-one" />
+          <span className="mission-success-ring ring-two" />
+        </div>
+
+        <motion.div
+          className="mission-success-status"
+          initial={{ opacity: 0, letterSpacing: '0.08em' }}
+          animate={{ opacity: 1, letterSpacing: '0.32em' }}
+          transition={{ delay: 0.55, duration: 0.8 }}
+        >
+          MISSION SUCCESSFUL
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.8 }}
+        >
+          SUSMITHA
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.95, duration: 0.8 }}
+        >
+          Another beautiful year around the sun begins now.
+        </motion.p>
+
+        <motion.div
+          className="mission-success-final-line"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.3, duration: 1 }}
+        >
+          HAPPY BIRTHDAY ✦
+        </motion.div>
+      </motion.div>
+
+      <div className="mission-success-bottom">
+        <span>✦</span>
+        <span>ALL SYSTEMS NOMINAL</span>
+        <span>✦</span>
+      </div>
     </motion.main>
   );
 }
@@ -1409,21 +1850,94 @@ const decorativeStars = Array.from(
 ───────────────────────────────────────────── */
 
 export default function Home() {
-  const [scene, setScene] = useState<1 | 2 | 3 | 4>(1);
+  const [scene, setScene] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
   const [launched, setLaunched] = useState(false);
+  const interstellarAudio = useRef<HTMLAudioElement | null>(null);
+  const birthdayAudio = useRef<HTMLAudioElement | null>(null);
+
+  const startInterstellar = () => {
+    const audio = interstellarAudio.current;
+    if (!audio) return;
+
+    audio.loop = true;
+    audio.volume = 0.28;
+
+    void audio.play().catch((error) => {
+      console.warn("Interstellar background music could not start:", error);
+    });
+  };
+
+  const resumeInterstellar = () => {
+    const audio = interstellarAudio.current;
+    if (!audio) return;
+
+    audio.loop = true;
+    audio.volume = 0.28;
+    void audio.play().catch(() => undefined);
+  };
+
+  const stopInterstellar = () => {
+    const audio = interstellarAudio.current;
+    if (!audio) return;
+    audio.pause();
+  };
+
+  const playBirthdayMusic = () => {
+    stopInterstellar();
+
+    const audio = birthdayAudio.current;
+    if (!audio) return;
+
+    audio.currentTime = 0;
+    audio.volume = 0.9;
+    audio.onended = () => {
+      resumeInterstellar();
+    };
+
+    void audio.play().catch((error) => {
+      console.warn("Birthday music could not start:", error);
+    });
+  };
+
+  const leaveBirthdayScene = () => {
+    const audio = birthdayAudio.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.onended = null;
+    }
+
+    resumeInterstellar();
+    setScene(3);
+  };
 
   const handleLaunch = () => {
     if (launched) return;
     setLaunched(true);
+    startInterstellar();
 
-    // Scene 2 will be connected after we build the zero-G birthday.
     window.setTimeout(() => {
       setScene(2);
     }, 1800);
   };
 
   return (
-    <AnimatePresence mode="wait">
+    <>
+      <audio
+        ref={interstellarAudio}
+        src="/audio/interstellar.mp3"
+        preload="auto"
+        loop
+        aria-hidden="true"
+      />
+      <audio
+        ref={birthdayAudio}
+        src="/audio/happy_birthday.mp3"
+        preload="auto"
+        aria-hidden="true"
+      />
+
+      <AnimatePresence mode="wait">
       {scene === 1 ? (
         <motion.main
           key="mission-launch"
@@ -1647,13 +2161,19 @@ export default function Home() {
       ) : scene === 2 ? (
         <SceneTwo
           key="scene-two"
-          onContinue={() => setScene(3)}
+          onContinue={leaveBirthdayScene}
+          onBirthdayStart={playBirthdayMusic}
         />
       ) : scene === 3 ? (
         <SceneThree key="scene-three" onContinue={() => setScene(4)} />
+      ) : scene === 4 ? (
+        <SceneFour key="scene-four" onContinue={() => setScene(5)} />
+      ) : scene === 5 ? (
+        <SceneFive key="scene-five" onContinue={() => setScene(6)} />
       ) : (
-        <SceneFour key="scene-four" onContinue={() => {}} />
+        <SceneSix key="scene-six" />
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   );
 }

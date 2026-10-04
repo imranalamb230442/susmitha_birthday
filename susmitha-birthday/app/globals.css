@@ -5221,3 +5221,1577 @@ button {
   .memory-card-field .memory-card-six{right:4% !important;bottom:0 !important}
   .memory-detail{bottom:70px !important;width:calc(100vw - 28px) !important}
 }
+
+
+/* =========================================================
+   SCENE 4 — FINAL MEMORY ARCHIVE LAYOUT
+   Clean 3 x 2 photo arrangement + safe zero-gravity motion
+   Added after the original Scene 4 styles so these rules win.
+========================================================= */
+
+.memory-card-field {
+  position: absolute !important;
+  z-index: 12 !important;
+  left: 50% !important;
+  top: 47% !important;
+  width: min(820px, 62vw) !important;
+  height: 500px !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none;
+}
+
+.memory-card-field .memory-card {
+  position: absolute !important;
+  width: 150px !important;
+  height: 195px !important;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+/* ---------------- TOP ROW ---------------- */
+
+.memory-card-field .memory-card-one {
+  left: 0 !important;
+  top: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+.memory-card-field .memory-card-two {
+  left: 50% !important;
+  top: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin-left: -75px;
+}
+
+.memory-card-field .memory-card-three {
+  right: 0 !important;
+  top: 0 !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+/* ---------------- BOTTOM ROW ---------------- */
+
+.memory-card-field .memory-card-four {
+  left: 8% !important;
+  bottom: 0 !important;
+  top: auto !important;
+  right: auto !important;
+}
+
+.memory-card-field .memory-card-five {
+  left: 50% !important;
+  bottom: 0 !important;
+  top: auto !important;
+  right: auto !important;
+  margin-left: -75px;
+}
+
+.memory-card-field .memory-card-six {
+  right: 8% !important;
+  bottom: 0 !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* =========================================================
+   SAFE FLOATING
+   Only a few pixels of movement, so cards cannot collide.
+========================================================= */
+
+@keyframes susmithaSafeFloat1 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  50% { transform: translate3d(5px, -7px, 0) rotate(-2deg); }
+}
+
+@keyframes susmithaSafeFloat2 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(3deg); }
+  50% { transform: translate3d(-5px, 7px, 0) rotate(5deg); }
+}
+
+@keyframes susmithaSafeFloat3 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-3deg); }
+  50% { transform: translate3d(-5px, -7px, 0) rotate(-1deg); }
+}
+
+@keyframes susmithaSafeFloat4 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(3deg); }
+  50% { transform: translate3d(6px, -6px, 0) rotate(5deg); }
+}
+
+@keyframes susmithaSafeFloat5 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-3deg); }
+  50% { transform: translate3d(-6px, -7px, 0) rotate(-5deg); }
+}
+
+@keyframes susmithaSafeFloat6 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(4deg); }
+  50% { transform: translate3d(-5px, -6px, 0) rotate(2deg); }
+}
+
+.memory-card-field .memory-card-one {
+  animation: susmithaSafeFloat1 8s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-two {
+  animation: susmithaSafeFloat2 9s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-three {
+  animation: susmithaSafeFloat3 10s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-four {
+  animation: susmithaSafeFloat4 9.5s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-five {
+  animation: susmithaSafeFloat5 11s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-six {
+  animation: susmithaSafeFloat6 10.5s ease-in-out infinite !important;
+}
+
+/* Keep the memory message in its own lower zone. */
+.memory-detail {
+  z-index: 200 !important;
+  left: 50% !important;
+  bottom: 42px !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(520px, calc(100vw - 40px));
+}
+
+/* ---------------- TABLET ---------------- */
+
+@media (max-width: 900px) {
+  .memory-card-field {
+    width: 88vw !important;
+    height: 450px !important;
+    top: 46% !important;
+  }
+
+  .memory-card-field .memory-card {
+    width: 125px !important;
+    height: 165px !important;
+  }
+
+  .memory-card-field .memory-card-two,
+  .memory-card-field .memory-card-five {
+    margin-left: -62.5px;
+  }
+
+  .memory-card-field .memory-card-four {
+    left: 3% !important;
+  }
+
+  .memory-card-field .memory-card-six {
+    right: 3% !important;
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 600px) {
+  .memory-card-field {
+    width: 96vw !important;
+    height: 370px !important;
+    top: 45% !important;
+  }
+
+  .memory-card-field .memory-card {
+    width: 92px !important;
+    height: 124px !important;
+  }
+
+  .memory-card-field .memory-card-two,
+  .memory-card-field .memory-card-five {
+    margin-left: -46px;
+  }
+
+  .memory-card-field .memory-card-four {
+    left: 2% !important;
+  }
+
+  .memory-card-field .memory-card-six {
+    right: 2% !important;
+  }
+
+  .memory-detail {
+    width: calc(100vw - 28px) !important;
+    bottom: 70px !important;
+  }
+}
+
+/* Respect reduced-motion settings. */
+@media (prefers-reduced-motion: reduce) {
+  .memory-card-field .memory-card {
+    animation: none !important;
+  }
+}
+
+
+/* =========================================================
+   SCENE 4 — LARGE FLOATING MEMORY CARD DECK
+   Big cards • one after another • gentle zero-gravity motion
+========================================================= */
+
+.memory-card-field {
+  position: absolute !important;
+  z-index: 12 !important;
+  left: 50% !important;
+  top: 48% !important;
+  width: min(820px, 64vw) !important;
+  height: 470px !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none;
+}
+
+/* Large cinematic cards */
+.memory-card-field .memory-card {
+  position: absolute !important;
+  width: 235px !important;
+  height: 300px !important;
+  box-sizing: border-box;
+  pointer-events: auto;
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    rgba(20, 16, 38, .96),
+    rgba(8, 6, 19, .94)
+  );
+  border: 1px solid rgba(243, 209, 138, .32);
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.48),
+    0 0 45px rgba(201,183,255,.07);
+  transition:
+    border-color .35s ease,
+    box-shadow .35s ease,
+    scale .35s ease;
+}
+
+/* Make the cards feel like physical archive prints */
+.memory-card-field .memory-card::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255,255,255,.055);
+  pointer-events: none;
+}
+
+/* One-after-another staggered composition */
+.memory-card-field .memory-card-one {
+  left: 0 !important;
+  top: 70px !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: rotate(-7deg);
+  animation: deckFloatOne 8s ease-in-out infinite !important;
+}
+
+.memory-card-field .memory-card-two {
+  left: 19% !important;
+  top: 25px !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin-left: 0 !important;
+  transform: rotate(-3deg);
+  animation: deckFloatTwo 9s ease-in-out infinite !important;
+  z-index: 3;
+}
+
+.memory-card-field .memory-card-three {
+  left: 38% !important;
+  top: 5px !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: rotate(1deg);
+  animation: deckFloatThree 10s ease-in-out infinite !important;
+  z-index: 5;
+}
+
+.memory-card-field .memory-card-four {
+  left: 57% !important;
+  top: 35px !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: rotate(4deg);
+  animation: deckFloatFour 9.5s ease-in-out infinite !important;
+  z-index: 4;
+}
+
+.memory-card-field .memory-card-five {
+  left: 68% !important;
+  top: 90px !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin-left: 0 !important;
+  transform: rotate(7deg);
+  animation: deckFloatFive 11s ease-in-out infinite !important;
+  z-index: 2;
+}
+
+.memory-card-field .memory-card-six {
+  left: 80% !important;
+  top: 135px !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: rotate(9deg);
+  animation: deckFloatSix 10.5s ease-in-out infinite !important;
+  z-index: 1;
+}
+
+/* Gentle independent floating — small enough to preserve the deck */
+@keyframes deckFloatOne {
+  0%,100% { transform: translate3d(0,0,0) rotate(-7deg); }
+  50% { transform: translate3d(-4px,-13px,0) rotate(-5deg); }
+}
+
+@keyframes deckFloatTwo {
+  0%,100% { transform: translate3d(0,0,0) rotate(-3deg); }
+  50% { transform: translate3d(3px,-15px,0) rotate(-1deg); }
+}
+
+@keyframes deckFloatThree {
+  0%,100% { transform: translate3d(0,0,0) rotate(1deg); }
+  50% { transform: translate3d(-3px,-12px,0) rotate(2deg); }
+}
+
+@keyframes deckFloatFour {
+  0%,100% { transform: translate3d(0,0,0) rotate(4deg); }
+  50% { transform: translate3d(4px,-14px,0) rotate(2deg); }
+}
+
+@keyframes deckFloatFive {
+  0%,100% { transform: translate3d(0,0,0) rotate(7deg); }
+  50% { transform: translate3d(-4px,-12px,0) rotate(5deg); }
+}
+
+@keyframes deckFloatSix {
+  0%,100% { transform: translate3d(0,0,0) rotate(9deg); }
+  50% { transform: translate3d(3px,-13px,0) rotate(7deg); }
+}
+
+/* Photo area becomes large and cinematic */
+.memory-card-field .memory-card-image {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 48px;
+  bottom: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+}
+
+.memory-card-field .memory-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Card metadata */
+.memory-card-field .memory-card-top {
+  left: 14px !important;
+  right: 14px !important;
+  top: 13px !important;
+  font-size: 7px !important;
+  z-index: 3;
+}
+
+.memory-card-field .memory-card-bottom {
+  left: 14px !important;
+  right: 14px !important;
+  bottom: 13px !important;
+  font-size: 7px !important;
+  z-index: 3;
+}
+
+/* Selected card */
+.memory-card-field .memory-card:hover,
+.memory-card-field .memory-card--active {
+  border-color: rgba(243,209,138,.9);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.62),
+    0 0 55px rgba(243,209,138,.15);
+  scale: 1.035;
+  z-index: 50 !important;
+}
+
+/* Message stays completely below the deck */
+.memory-detail {
+  position: fixed !important;
+  z-index: 200 !important;
+  left: 50% !important;
+  bottom: 32px !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(560px, calc(100vw - 40px)) !important;
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 1100px) {
+  .memory-card-field {
+    width: 88vw !important;
+    height: 410px !important;
+  }
+
+  .memory-card-field .memory-card {
+    width: 180px !important;
+    height: 235px !important;
+  }
+
+  .memory-card-field .memory-card-one { left: 0 !important; top: 75px !important; }
+  .memory-card-field .memory-card-two { left: 17% !important; top: 40px !important; }
+  .memory-card-field .memory-card-three { left: 34% !important; top: 20px !important; }
+  .memory-card-field .memory-card-four { left: 51% !important; top: 40px !important; }
+  .memory-card-field .memory-card-five { left: 68% !important; top: 75px !important; }
+  .memory-card-field .memory-card-six { left: 78% !important; top: 120px !important; }
+
+  .memory-card-field .memory-card-image {
+    left: 10px;
+    right: 10px;
+    top: 39px;
+    bottom: 34px;
+  }
+}
+
+/* ---------- MOBILE: horizontal card deck ---------- */
+
+@media (max-width: 600px) {
+  .memory-card-field {
+    left: 50% !important;
+    top: 46% !important;
+    width: 100vw !important;
+    height: 330px !important;
+  }
+
+  .memory-card-field .memory-card {
+    width: 132px !important;
+    height: 176px !important;
+  }
+
+  .memory-card-field .memory-card-one {
+    left: 1% !important;
+    top: 75px !important;
+  }
+
+  .memory-card-field .memory-card-two {
+    left: 16% !important;
+    top: 42px !important;
+  }
+
+  .memory-card-field .memory-card-three {
+    left: 31% !important;
+    top: 20px !important;
+  }
+
+  .memory-card-field .memory-card-four {
+    left: 46% !important;
+    top: 42px !important;
+  }
+
+  .memory-card-field .memory-card-five {
+    left: 61% !important;
+    top: 75px !important;
+  }
+
+  .memory-card-field .memory-card-six {
+    left: 76% !important;
+    top: 110px !important;
+  }
+
+  .memory-card-field .memory-card-image {
+    left: 8px;
+    right: 8px;
+    top: 31px;
+    bottom: 28px;
+  }
+
+  .memory-card-field .memory-card-top {
+    left: 8px !important;
+    right: 8px !important;
+    top: 7px !important;
+    font-size: 5px !important;
+  }
+
+  .memory-card-field .memory-card-bottom {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 7px !important;
+    font-size: 5px !important;
+  }
+
+  .memory-detail {
+    width: calc(100vw - 24px) !important;
+    bottom: 62px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-card-field .memory-card {
+    animation: none !important;
+  }
+}
+
+
+/* =========================================================
+   SCENE 4 — SINGLE LARGE MEMORY CAROUSEL
+   One big photo card at a time + arrows underneath
+========================================================= */
+
+.memory-card-field,
+.memory-detail,
+.memory-archive-hint {
+  display: none !important;
+}
+
+/* Header/introduction for the carousel */
+.memory-carousel-intro {
+  position: absolute;
+  z-index: 20;
+  top: 8.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, 90vw);
+  text-align: center;
+  pointer-events: none;
+}
+
+.memory-carousel-intro > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #f3d18a;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .25em;
+}
+
+.memory-carousel-intro h2 {
+  margin: 0;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 4.2vw, 58px);
+  font-weight: 400;
+  line-height: .95;
+}
+
+.memory-carousel-intro h2 em {
+  color: #efb7d3;
+  font-style: italic;
+}
+
+.memory-carousel-intro p {
+  margin: 10px 0 0;
+  color: rgba(255,255,255,.52);
+  font-size: 11px;
+  letter-spacing: .02em;
+}
+
+/* Keep the 3D orbit behind the actual memory card */
+.memory-archive-canvas {
+  z-index: 2 !important;
+  opacity: .65;
+}
+
+/* Main card area */
+.memory-carousel-stage {
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  top: 53%;
+  width: min(510px, 38vw);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Large single card */
+.memory-photo-card {
+  width: 100%;
+  background: rgba(9, 6, 20, .92);
+  border: 1px solid rgba(243,209,138,.42);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow:
+    0 35px 100px rgba(0,0,0,.58),
+    0 0 65px rgba(201,183,255,.09);
+  backdrop-filter: blur(12px);
+}
+
+.memory-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 5px;
+  background:
+    linear-gradient(135deg, rgba(201,183,255,.12), rgba(239,183,211,.07)),
+    #0b0816;
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.memory-photo-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.memory-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255,255,255,.25);
+  font-size: 8px;
+  letter-spacing: .22em;
+  pointer-events: none;
+}
+
+.memory-photo-info {
+  padding: 16px 10px 13px;
+  text-align: center;
+}
+
+.memory-photo-index {
+  display: block;
+  color: #f3d18a;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .22em;
+}
+
+.memory-photo-info h3 {
+  margin: 7px 0 5px;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 400;
+}
+
+.memory-photo-info p {
+  max-width: 420px;
+  margin: 0 auto;
+  color: rgba(255,255,255,.56);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+/* Arrows directly below the card */
+.memory-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 14px;
+}
+
+.memory-carousel-arrow {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 50%;
+  background: rgba(8,6,18,.72);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease;
+}
+
+.memory-carousel-arrow:hover {
+  transform: translateY(-3px);
+  border-color: rgba(243,209,138,.75);
+  background: rgba(243,209,138,.08);
+}
+
+.memory-carousel-arrow:active {
+  transform: scale(.94);
+}
+
+.memory-carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.memory-carousel-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.24);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.memory-carousel-dots button.active {
+  width: 25px;
+  border-radius: 8px;
+  background: #efb7d3;
+  box-shadow: 0 0 15px rgba(239,183,211,.35);
+}
+
+.memory-carousel-hint {
+  margin-top: 8px;
+  color: rgba(255,255,255,.36);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+/* Orbital decoration around the single card */
+.memory-carousel-orbit {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 52%;
+  border: 1px solid rgba(201,183,255,.11);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.memory-carousel-orbit-one {
+  width: min(760px, 62vw);
+  height: min(430px, 42vw);
+  transform: translate(-50%, -50%) rotate(-8deg);
+}
+
+.memory-carousel-orbit-two {
+  width: min(640px, 52vw);
+  height: min(340px, 34vw);
+  transform: translate(-50%, -50%) rotate(18deg);
+  border-color: rgba(243,209,138,.10);
+}
+
+/* Keep transmission button away from carousel */
+.memory-next-button {
+  z-index: 50 !important;
+  right: 5% !important;
+  bottom: 8% !important;
+}
+
+/* ---------------- TABLET ---------------- */
+
+@media (max-width: 900px) {
+  .memory-carousel-intro {
+    top: 8%;
+  }
+
+  .memory-carousel-stage {
+    width: min(500px, 62vw);
+    top: 52%;
+  }
+
+  .memory-photo-card {
+    padding: 8px;
+  }
+
+  .memory-carousel-orbit-one {
+    width: 75vw;
+    height: 45vw;
+  }
+
+  .memory-carousel-orbit-two {
+    width: 62vw;
+    height: 38vw;
+  }
+
+  .memory-next-button {
+    right: 4% !important;
+    bottom: 5% !important;
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 600px) {
+  .memory-carousel-intro {
+    top: 8%;
+    width: 94vw;
+  }
+
+  .memory-carousel-intro > span {
+    font-size: 7px;
+  }
+
+  .memory-carousel-intro h2 {
+    font-size: 31px;
+  }
+
+  .memory-carousel-intro p {
+    font-size: 9px;
+  }
+
+  .memory-carousel-stage {
+    top: 53%;
+    width: min(350px, 86vw);
+  }
+
+  .memory-photo-card {
+    padding: 7px;
+    border-radius: 8px;
+  }
+
+  .memory-photo-info {
+    padding: 12px 6px 10px;
+  }
+
+  .memory-photo-info h3 {
+    font-size: 19px;
+  }
+
+  .memory-photo-info p {
+    font-size: 8px;
+  }
+
+  .memory-carousel-controls {
+    gap: 13px;
+    margin-top: 10px;
+  }
+
+  .memory-carousel-arrow {
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
+  }
+
+  .memory-carousel-dots {
+    gap: 5px;
+  }
+
+  .memory-carousel-dots button.active {
+    width: 20px;
+  }
+
+  .memory-carousel-hint {
+    font-size: 6px;
+  }
+
+  .memory-carousel-orbit-one {
+    width: 94vw;
+    height: 58vw;
+  }
+
+  .memory-carousel-orbit-two {
+    width: 80vw;
+    height: 46vw;
+  }
+
+  .memory-next-button {
+    right: 50% !important;
+    transform: translateX(50%) !important;
+    bottom: 2.5% !important;
+    white-space: nowrap;
+  }
+}
+
+
+/* =========================================================
+   SCENE 4 — CLEAN CAROUSEL + SIDE ROCKET BOOSTERS
+========================================================= */
+
+/* Remove the oversized text that sits behind the card. */
+.memory-carousel-intro {
+  display: none !important;
+}
+
+/* Keep the main card perfectly centered. */
+.memory-carousel-stage {
+  top: 50% !important;
+  width: min(510px, 38vw) !important;
+  position: absolute !important;
+  z-index: 40 !important;
+}
+
+/* Two side rocket booster flames */
+.memory-carousel-stage::before,
+.memory-carousel-stage::after {
+  content: "";
+  position: absolute;
+  top: 46%;
+  width: 44px;
+  height: 120px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50% 50% 42% 42%;
+  filter: blur(1px);
+  background:
+    radial-gradient(
+      ellipse at center top,
+      rgba(255,255,255,.98) 0 8%,
+      rgba(243,209,138,.98) 12%,
+      rgba(255,166,75,.95) 34%,
+      rgba(239,110,70,.72) 55%,
+      rgba(180,71,105,.18) 76%,
+      transparent 82%
+    );
+  transform-origin: center top;
+  animation: sideBoosterFire .8s ease-in-out infinite alternate;
+}
+
+.memory-carousel-stage::before {
+  left: -62px;
+  transform: rotate(7deg);
+}
+
+.memory-carousel-stage::after {
+  right: -62px;
+  transform: rotate(-7deg);
+  animation-delay: .18s;
+}
+
+/* Hot white/gold flame core */
+.memory-photo-card::before,
+.memory-photo-card::after {
+  content: "";
+  position: absolute;
+  top: 48%;
+  width: 16px;
+  height: 72px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,.95),
+    rgba(243,209,138,.9) 30%,
+    rgba(255,135,66,.45) 68%,
+    transparent
+  );
+  filter: blur(2px);
+  animation: boosterCore .55s ease-in-out infinite alternate;
+}
+
+.memory-photo-card::before {
+  left: -38px;
+}
+
+.memory-photo-card::after {
+  right: -38px;
+  animation-delay: .12s;
+}
+
+@keyframes sideBoosterFire {
+  0% {
+    opacity: .72;
+    height: 92px;
+    transform: scaleX(.82) scaleY(.82) rotate(7deg);
+  }
+  50% {
+    opacity: 1;
+    height: 125px;
+    transform: scaleX(1) scaleY(1) rotate(5deg);
+  }
+  100% {
+    opacity: .78;
+    height: 105px;
+    transform: scaleX(.88) scaleY(.92) rotate(8deg);
+  }
+}
+
+@keyframes boosterCore {
+  0% {
+    opacity: .65;
+    transform: scaleY(.82);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1.08);
+  }
+}
+
+/* Give the card a subtle launch glow */
+.memory-photo-card {
+  position: relative !important;
+  box-shadow:
+    0 35px 100px rgba(0,0,0,.58),
+    0 0 55px rgba(243,209,138,.10),
+    0 0 110px rgba(201,183,255,.06) !important;
+}
+
+/* Keep the arrows below the card. */
+.memory-carousel-controls {
+  position: relative;
+  z-index: 60;
+}
+
+/* Keep orbit behind everything. */
+.memory-carousel-orbit {
+  z-index: 3 !important;
+}
+
+/* Transmission stays clear of the card. */
+.memory-next-button {
+  z-index: 80 !important;
+}
+
+/* ---------------- TABLET ---------------- */
+
+@media (max-width: 900px) {
+  .memory-carousel-stage {
+    width: min(500px, 62vw) !important;
+    top: 50% !important;
+  }
+
+  .memory-carousel-stage::before {
+    left: -52px;
+  }
+
+  .memory-carousel-stage::after {
+    right: -52px;
+  }
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 600px) {
+  .memory-carousel-stage {
+    width: min(350px, 86vw) !important;
+    top: 50% !important;
+  }
+
+  .memory-carousel-stage::before,
+  .memory-carousel-stage::after {
+    width: 26px;
+    height: 78px;
+  }
+
+  .memory-carousel-stage::before {
+    left: -35px;
+  }
+
+  .memory-carousel-stage::after {
+    right: -35px;
+  }
+
+  .memory-photo-card::before,
+  .memory-photo-card::after {
+    width: 10px;
+    height: 48px;
+  }
+
+  .memory-photo-card::before {
+    left: -23px;
+  }
+
+  .memory-photo-card::after {
+    right: -23px;
+  }
+}
+
+
+/* =========================================================
+   SCENE 4 — LARGE COSMIC FLOWERS
+   Two decorative flowers floating beside the memory card
+========================================================= */
+
+.memory-side-flower {
+  position: absolute;
+  z-index: 25;
+  width: 132px;
+  height: 132px;
+  pointer-events: none;
+  border-radius: 50%;
+  filter:
+    drop-shadow(0 0 18px rgba(239,183,211,.30))
+    drop-shadow(0 0 42px rgba(201,183,255,.13));
+  animation: cosmicFlowerFloat 6s ease-in-out infinite;
+}
+
+/* Five large glowing petals */
+.memory-side-flower::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse at 50% 12%,
+      rgba(255,205,231,.95) 0 17%,
+      rgba(239,183,211,.72) 18%,
+      transparent 31%
+    ),
+    radial-gradient(
+      ellipse at 88% 38%,
+      rgba(215,194,255,.92) 0 17%,
+      rgba(201,183,255,.68) 18%,
+      transparent 31%
+    ),
+    radial-gradient(
+      ellipse at 72% 87%,
+      rgba(255,212,232,.92) 0 17%,
+      rgba(239,183,211,.65) 18%,
+      transparent 31%
+    ),
+    radial-gradient(
+      ellipse at 28% 87%,
+      rgba(215,194,255,.92) 0 17%,
+      rgba(201,183,255,.65) 18%,
+      transparent 31%
+    ),
+    radial-gradient(
+      ellipse at 12% 38%,
+      rgba(255,205,231,.94) 0 17%,
+      rgba(239,183,211,.68) 18%,
+      transparent 31%
+    );
+  filter: blur(.25px);
+}
+
+/* Bright golden flower centre */
+.memory-side-flower::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      #fff7d8 0 18%,
+      #f3d18a 20% 42%,
+      rgba(243,209,138,.72) 43% 62%,
+      transparent 64%
+    );
+  box-shadow:
+    0 0 12px rgba(255,247,216,.95),
+    0 0 28px rgba(243,209,138,.55),
+    0 0 55px rgba(243,209,138,.22);
+}
+
+.memory-side-flower span {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 3px;
+  height: 46px;
+  transform: translateX(-50%) rotate(4deg);
+  transform-origin: top center;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    rgba(159,216,255,.45),
+    rgba(159,216,255,.08),
+    transparent
+  );
+  opacity: .65;
+}
+
+.memory-side-flower-left {
+  left: calc(50% - 390px);
+  top: 43%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+}
+
+.memory-side-flower-right {
+  left: calc(50% + 390px);
+  top: 43%;
+  transform: translate(-50%, -50%) rotate(10deg);
+  animation-delay: -2.5s;
+}
+
+@keyframes cosmicFlowerFloat {
+  0%, 100% {
+    margin-top: 0;
+    scale: 1;
+  }
+
+  50% {
+    margin-top: -13px;
+    scale: 1.035;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+  .memory-side-flower {
+    width: 100px;
+    height: 100px;
+  }
+
+  .memory-side-flower-left {
+    left: calc(50% - 330px);
+  }
+
+  .memory-side-flower-right {
+    left: calc(50% + 330px);
+  }
+
+  .memory-side-flower::after {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .memory-side-flower {
+    width: 68px;
+    height: 68px;
+    top: 43%;
+  }
+
+  .memory-side-flower-left {
+    left: 8%;
+  }
+
+  .memory-side-flower-right {
+    left: 92%;
+  }
+
+  .memory-side-flower::after {
+    width: 17px;
+    height: 17px;
+  }
+
+  .memory-side-flower span {
+    height: 25px;
+  }
+}
+
+/* =========================================================
+   SCENE 5 — THE LETTER / A LETTER ACROSS THE STARS
+   ========================================================= */
+
+.letter-scene {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(164, 124, 255, .16), transparent 32%),
+    radial-gradient(circle at 15% 20%, rgba(255, 170, 214, .08), transparent 25%),
+    radial-gradient(circle at 85% 75%, rgba(255, 210, 140, .08), transparent 25%),
+    #05030c;
+  color: #fff;
+  isolation: isolate;
+}
+
+.letter-stars { position:absolute; inset:0; pointer-events:none; z-index:0; }
+.letter-stars span {
+  position:absolute; width:3px; height:3px; border-radius:50%; background:#fff;
+  box-shadow:0 0 8px rgba(255,255,255,.9),0 0 18px rgba(210,180,255,.7);
+  animation:letterStarTwinkle 3s ease-in-out infinite;
+}
+@keyframes letterStarTwinkle { 0%,100%{opacity:.25;transform:scale(.7)} 50%{opacity:1;transform:scale(1.5)} }
+
+.letter-orbit { position:absolute; border:1px solid rgba(205,173,255,.1); border-radius:50%; pointer-events:none; z-index:0; }
+.letter-orbit-one { width:900px; height:300px; transform:rotate(-18deg); animation:letterOrbitFloat 12s ease-in-out infinite; }
+.letter-orbit-two { width:700px; height:220px; transform:rotate(25deg); border-color:rgba(255,205,150,.08); animation:letterOrbitFloat2 15s ease-in-out infinite reverse; }
+@keyframes letterOrbitFloat { 0%,100%{transform:rotate(-18deg) scale(1)} 50%{transform:rotate(-15deg) scale(1.04)} }
+@keyframes letterOrbitFloat2 { 0%,100%{transform:rotate(25deg) scale(1)} 50%{transform:rotate(29deg) scale(1.04)} }
+
+.letter-content {
+  position:relative; z-index:10; width:min(820px,90vw); height:92svh;
+  display:flex; flex-direction:column; align-items:center; padding:4vh 0 2vh;
+}
+.letter-kicker { font-size:10px; letter-spacing:.35em; color:rgba(220,198,255,.72); margin-bottom:8px; text-align:center; }
+.letter-title { margin:0; text-align:center; font-family:Georgia,"Times New Roman",serif; font-size:clamp(28px,4vw,52px); font-weight:400; letter-spacing:.08em; line-height:.95; text-shadow:0 0 25px rgba(190,150,255,.25),0 0 50px rgba(190,150,255,.12); }
+.letter-title span { display:block; margin-top:8px; font-family:Inter,Arial,sans-serif; font-size:.32em; font-weight:500; letter-spacing:.45em; color:rgba(255,218,173,.88); }
+.letter-subtitle { margin-top:8px; margin-bottom:16px; font-size:11px; letter-spacing:.12em; color:rgba(255,255,255,.45); }
+
+.letter-card {
+  width:100%; max-width:720px; flex:1; min-height:0; border:1px solid rgba(225,196,255,.22); border-radius:22px;
+  background:linear-gradient(145deg,rgba(35,25,55,.86),rgba(11,8,23,.92));
+  box-shadow:0 30px 100px rgba(0,0,0,.55),0 0 80px rgba(155,105,255,.1),inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); overflow:hidden; animation:letterCardAppear .9s ease both;
+}
+@keyframes letterCardAppear { from{opacity:0;transform:translateY(25px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+.letter-card-header { height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:rgba(255,255,255,.025); }
+.letter-card-header>div:first-child { display:flex; flex-direction:column; gap:2px; }
+.letter-label { font-size:8px; letter-spacing:.3em; color:rgba(255,255,255,.35); }
+.letter-card-header strong { font-size:12px; letter-spacing:.2em; color:rgba(255,225,185,.92); }
+.letter-signal { display:flex; align-items:center; gap:8px; font-size:8px; letter-spacing:.16em; color:rgba(190,255,218,.6); }
+.signal-dot { width:6px; height:6px; border-radius:50%; background:#a9ffd0; box-shadow:0 0 8px #a9ffd0,0 0 16px rgba(169,255,208,.5); animation:signalPulse 1.5s ease-in-out infinite; }
+@keyframes signalPulse { 0%,100%{opacity:.45} 50%{opacity:1} }
+.letter-divider { width:calc(100% - 48px); height:1px; margin:0 auto; background:linear-gradient(90deg,transparent,rgba(224,191,255,.22),transparent); }
+
+.letter-body { height:calc(100% - 65px); overflow-y:auto; padding:26px 34px 30px; scrollbar-width:thin; scrollbar-color:rgba(210,174,255,.35) transparent; }
+.letter-body::-webkit-scrollbar { width:4px; }
+.letter-body::-webkit-scrollbar-track { background:transparent; }
+.letter-body::-webkit-scrollbar-thumb { background:rgba(210,174,255,.3); border-radius:10px; }
+.letter-body p { margin:0 0 18px; font-family:Georgia,"Times New Roman",serif; font-size:15px; line-height:1.75; color:rgba(250,244,255,.78); }
+.letter-body strong { color:rgba(255,222,179,.98); font-weight:600; }
+.letter-highlight { text-align:center; margin:25px 0 !important; font-family:Inter,Arial,sans-serif !important; font-size:14px !important; line-height:2 !important; letter-spacing:.18em; color:rgba(222,195,255,.9) !important; text-transform:uppercase; }
+.letter-ending { margin-top:28px !important; text-align:center; }
+.letter-signature { margin-top:28px; padding-top:18px; border-top:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; align-items:flex-end; gap:4px; font-family:Georgia,"Times New Roman",serif; }
+.letter-signature span:first-child { font-size:12px; color:rgba(255,255,255,.45); }
+.letter-signature strong { font-size:21px; font-weight:400; color:rgba(255,220,184,.95); }
+.signature-heart { font-size:15px; }
+
+.letter-next-button { margin-top:13px; border:1px solid rgba(223,190,255,.28); border-radius:999px; background:rgba(18,12,32,.8); color:rgba(255,238,214,.9); padding:11px 22px; display:flex; align-items:center; gap:14px; font-size:9px; font-weight:600; letter-spacing:.22em; cursor:pointer; transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease; }
+.letter-next-button:hover { transform:translateY(-2px); border-color:rgba(255,215,170,.6); background:rgba(40,24,60,.9); box-shadow:0 0 25px rgba(185,135,255,.15),0 0 35px rgba(255,205,155,.08); }
+.letter-arrow { font-size:17px; line-height:1; transition:transform .25s ease; }
+.letter-next-button:hover .letter-arrow { transform:translateX(5px); }
+
+.letter-spacecraft { position:absolute; right:8%; top:13%; width:55px; height:35px; opacity:.45; transform:rotate(-18deg); z-index:1; animation:spacecraftFloat 7s ease-in-out infinite; }
+.spacecraft-body { position:absolute; left:12px; top:8px; width:32px; height:18px; border-radius:50% 45% 45% 50%; background:linear-gradient(180deg,#ded5ff,#8177aa); box-shadow:0 0 12px rgba(206,191,255,.4); }
+.spacecraft-window { position:absolute; left:23px; top:12px; width:7px; height:7px; border-radius:50%; background:#171027; box-shadow:0 0 7px rgba(177,224,255,.7); }
+.spacecraft-wing { position:absolute; top:15px; width:17px; height:7px; background:#8f82bb; }
+.spacecraft-wing.left { left:1px; transform:skewY(-25deg); }
+.spacecraft-wing.right { right:1px; transform:skewY(25deg); }
+.spacecraft-flame { position:absolute; left:-4px; top:14px; width:13px; height:9px; border-radius:50%; background:#ffd89a; filter:blur(2px); animation:spacecraftFlame .5s ease-in-out infinite alternate; }
+@keyframes spacecraftFlame { from{transform:scaleX(.7);opacity:.55} to{transform:scaleX(1.3);opacity:1} }
+@keyframes spacecraftFloat { 0%,100%{transform:translateY(0) rotate(-18deg)} 50%{transform:translateY(-18px) rotate(-14deg)} }
+
+@media (max-width:600px) {
+  .letter-content{width:92vw;height:94svh;padding-top:2.5vh}
+  .letter-kicker{font-size:7px;letter-spacing:.25em}
+  .letter-title{font-size:30px}
+  .letter-title span{font-size:9px;letter-spacing:.28em}
+  .letter-subtitle{font-size:9px;margin-bottom:11px}
+  .letter-card{border-radius:17px}
+  .letter-card-header{height:55px;padding:0 15px}
+  .letter-card-header strong{font-size:9px}
+  .letter-signal{font-size:6px}
+  .letter-body{height:calc(100% - 56px);padding:21px 19px 25px}
+  .letter-body p{font-size:13px;line-height:1.7;margin-bottom:15px}
+  .letter-highlight{font-size:11px !important;letter-spacing:.12em}
+  .letter-signature strong{font-size:18px}
+  .letter-next-button{padding:10px 17px;font-size:7px;letter-spacing:.17em}
+  .letter-spacecraft{right:3%;top:9%;transform:scale(.7) rotate(-18deg)}
+  .letter-orbit-one{width:650px;height:220px}
+  .letter-orbit-two{width:500px;height:180px}
+}
+@media (max-width:380px) {
+  .letter-content{width:94vw;height:95svh}
+  .letter-title{font-size:26px}
+  .letter-subtitle{margin-bottom:8px}
+  .letter-body{padding:18px 15px 20px}
+  .letter-body p{font-size:12px;line-height:1.65}
+  .letter-card-header{padding:0 12px}
+  .letter-signal{display:none}
+}
+
+
+/* =========================================================
+   SCENE 6 — MISSION SUCCESSFUL
+   ========================================================= */
+
+.mission-success-scene {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(185, 142, 255, 0.19), transparent 30%),
+    radial-gradient(circle at 20% 25%, rgba(255, 181, 218, 0.08), transparent 26%),
+    radial-gradient(circle at 80% 76%, rgba(255, 213, 157, 0.08), transparent 24%),
+    #04020a;
+  color: #fff;
+  isolation: isolate;
+}
+
+.mission-success-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mission-success-stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,.9);
+  animation: missionSuccessTwinkle 3.2s ease-in-out infinite;
+}
+
+.mission-success-stars span:nth-child(4n) { width: 3px; height: 3px; }
+
+@keyframes missionSuccessTwinkle {
+  0%, 100% { opacity: .2; transform: scale(.7); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+.mission-success-orbit {
+  position: absolute;
+  border: 1px solid rgba(215, 188, 255, .12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.mission-success-orbit-one {
+  width: 900px;
+  height: 320px;
+  transform: rotate(-20deg);
+  animation: missionSuccessOrbitOne 14s ease-in-out infinite;
+}
+
+.mission-success-orbit-two {
+  width: 680px;
+  height: 230px;
+  border-color: rgba(255, 211, 161, .1);
+  transform: rotate(22deg);
+  animation: missionSuccessOrbitTwo 17s ease-in-out infinite;
+}
+
+@keyframes missionSuccessOrbitOne {
+  0%,100% { transform: rotate(-20deg) scale(1); }
+  50% { transform: rotate(-16deg) scale(1.045); }
+}
+
+@keyframes missionSuccessOrbitTwo {
+  0%,100% { transform: rotate(22deg) scale(1); }
+  50% { transform: rotate(27deg) scale(1.035); }
+}
+
+.mission-success-center {
+  position: relative;
+  z-index: 10;
+  width: min(760px, 88vw);
+  text-align: center;
+  padding: 44px 24px;
+}
+
+.mission-success-eyebrow {
+  font-size: 9px;
+  letter-spacing: .34em;
+  color: rgba(224, 202, 255, .72);
+  margin-bottom: 22px;
+}
+
+.mission-success-emblem {
+  position: relative;
+  width: 138px;
+  height: 138px;
+  margin: 0 auto 28px;
+  display: grid;
+  place-items: center;
+}
+
+.mission-success-core {
+  position: relative;
+  z-index: 3;
+  font-size: 35px;
+  color: #ffe0ad;
+  text-shadow: 0 0 18px rgba(255, 219, 166, .85), 0 0 44px rgba(197, 155, 255, .5);
+  animation: missionSuccessPulse 2.2s ease-in-out infinite;
+}
+
+.mission-success-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(220, 192, 255, .35);
+  border-radius: 50%;
+}
+
+.mission-success-ring.ring-one {
+  transform: rotate(18deg) scaleX(1.45);
+  animation: missionSuccessRingOne 8s linear infinite;
+}
+
+.mission-success-ring.ring-two {
+  transform: rotate(-24deg) scaleX(1.45);
+  border-color: rgba(255, 211, 165, .25);
+  animation: missionSuccessRingTwo 10s linear infinite;
+}
+
+@keyframes missionSuccessRingOne {
+  to { transform: rotate(378deg) scaleX(1.45); }
+}
+
+@keyframes missionSuccessRingTwo {
+  to { transform: rotate(-384deg) scaleX(1.45); }
+}
+
+@keyframes missionSuccessPulse {
+  0%,100% { transform: scale(1); opacity: .82; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+.mission-success-status {
+  font-size: clamp(18px, 3.3vw, 34px);
+  font-weight: 600;
+  color: rgba(255, 226, 190, .96);
+  text-shadow: 0 0 25px rgba(255, 198, 143, .16);
+}
+
+.mission-success-center h1 {
+  margin: 15px 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(42px, 7vw, 82px);
+  font-weight: 400;
+  letter-spacing: .15em;
+  color: #fff;
+}
+
+.mission-success-center p {
+  margin: 16px auto 0;
+  max-width: 540px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(13px, 1.7vw, 17px);
+  line-height: 1.7;
+  color: rgba(250, 242, 255, .58);
+}
+
+.mission-success-final-line {
+  margin-top: 34px;
+  font-size: 9px;
+  letter-spacing: .35em;
+  color: rgba(215, 195, 255, .62);
+}
+
+.mission-success-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+  font-size: 8px;
+  letter-spacing: .24em;
+  color: rgba(255,255,255,.35);
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .mission-success-center {
+    width: 92vw;
+    padding: 32px 16px;
+  }
+
+  .mission-success-emblem {
+    width: 108px;
+    height: 108px;
+    margin-bottom: 24px;
+  }
+
+  .mission-success-core { font-size: 28px; }
+  .mission-success-eyebrow { font-size: 7px; letter-spacing: .24em; }
+  .mission-success-status { font-size: 18px; letter-spacing: .23em !important; }
+  .mission-success-center h1 { font-size: 42px; letter-spacing: .1em; }
+  .mission-success-center p { font-size: 12px; }
+  .mission-success-final-line { font-size: 7px; letter-spacing: .25em; margin-top: 26px; }
+  .mission-success-bottom { bottom: 18px; font-size: 6px; gap: 9px; }
+  .mission-success-orbit-one { width: 650px; height: 220px; }
+  .mission-success-orbit-two { width: 510px; height: 175px; }
+}
