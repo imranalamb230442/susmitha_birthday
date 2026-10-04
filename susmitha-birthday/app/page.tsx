@@ -866,457 +866,524 @@ function SceneTwo({ onContinue }: { onContinue: () => void }) {
 
 
 /* ─────────────────────────────────────────────
-   SCENE 3 — NEXT DESTINATION / INTERACTIVE MISSION
+   SCENE 3 — SIGNAL DECODING
 ───────────────────────────────────────────── */
 
-type MissionObject = "isro" | "earth" | "moon" | "mars" | "satellite" | "asteroid" | "ship";
+type SignalId = "origin" | "distance" | "frequency" | "unknown";
 
-const missionContent: Record<MissionObject, { label: string; title: string; text: string }> = {
-  isro: {
-    label: "ORIGIN / ISRO · INDIA",
-    title: "WHERE OUR ORBITS FIRST CROSSED",
-    text: "Of all the places we could have met, we met where people dream about reaching the stars — ISRO.",
+const signalContent: Record<SignalId, {
+  number: string;
+  label: string;
+  title: string;
+  text: string;
+  telemetry: string;
+  accent: string;
+}> = {
+  origin: {
+    number: "01",
+    label: "MEMORY / ISRO",
+    title: "WE FIRST MET",
+    text: "We first met at ISRO. I still like thinking about how a place surrounded by rockets, satellites and stars became part of our story.",
+    telemetry: "FIRST MEET / MEMORY LOCKED",
+    accent: "#f3d18a",
   },
-  earth: {
-    label: "ORIGIN / EARTH",
-    title: "EVERY JOURNEY NEEDS A HOME",
-    text: "This is where the birthday mission began — one little orbit around the Sun at a time.",
+  distance: {
+    number: "02",
+    label: "MEMORY / COMMUNICATION",
+    title: "THE GAP",
+    text: "Then came the communication gap. We didn't talk for a while, but somehow the signal found its way back.",
+    telemetry: "COMMUNICATION GAP / SIGNAL RETURNED",
+    accent: "#c9b7ff",
   },
-  moon: {
-    label: "WAYPOINT / MOON",
-    title: "A LITTLE CLOSER TO THE STARS",
-    text: "A quiet stop between where we are and everything that still waits ahead.",
+  frequency: {
+    number: "03",
+    label: "MEMORY / CONVERSATIONS",
+    title: "WE STARTED TALKING",
+    text: "And then we started talking again. Slowly, the conversations became longer, easier and more natural.",
+    telemetry: "CONVERSATION RESTORED / CONNECTION GROWING",
+    accent: "#efb7d3",
   },
-  mars: {
-    label: "DESTINATION / MARS",
-    title: "THE NEXT HORIZON",
-    text: "There is always another world to discover, another dream to chase, another chapter to begin.",
-  },
-  satellite: {
-    label: "SIGNAL / ORBITAL SATELLITE",
-    title: "MESSAGE RECEIVED",
-    text: "A birthday signal is travelling with this mission. Something special is waiting in the next chapter.",
-  },
-  asteroid: {
-    label: "ENCOUNTER / ASTEROID",
-    title: "EXPECT THE UNEXPECTED",
-    text: "Not every beautiful moment is planned. Some of the best ones simply cross your orbit.",
-  },
-  ship: {
-    label: "VEHICLE / SUS-03",
-    title: "READY FOR THE NEXT CHAPTER",
-    text: "The destination is still unfolding. All that matters now is enjoying the journey.",
+  unknown: {
+    number: "04",
+    label: "MEMORY / PLACES",
+    title: "THE PLACES",
+    text: "From visiting different places to making random little memories, those moments became some of the nicest parts of the journey. And somewhere along the way, I think we crossed paths for a reason.",
+    telemetry: "MEMORIES MADE / PATHS CROSSED",
+    accent: "#9fd8ff",
   },
 };
 
-function MissionOriginStation({
-  active,
-  onSelect,
-}: {
-  active: boolean;
-  onSelect: () => void;
-}) {
+function SignalSatellite({ active, decoding }: { active: boolean; decoding: boolean }) {
   const ref = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (!ref.current) return;
     const t = clock.getElapsedTime();
-    ref.current.rotation.y = Math.sin(t * 0.35) * 0.12;
-    const pulse = 1 + Math.sin(t * 2.4) * (active ? 0.055 : 0.025);
-    ref.current.scale.lerp(new THREE.Vector3(pulse, pulse, pulse), 0.08);
+    ref.current.rotation.y = t * 0.22;
+    ref.current.rotation.z = Math.sin(t * 0.65) * 0.08;
+    const target = active || decoding ? 1.12 : 1;
+    ref.current.scale.lerp(new THREE.Vector3(target, target, target), 0.08);
+  });
+
+  return (
+    <group ref={ref}>
+      <mesh>
+        <boxGeometry args={[0.32, 0.42, 0.32]} />
+        <meshStandardMaterial color="#d9d2df" metalness={0.78} roughness={0.22} />
+      </mesh>
+      <mesh position={[-0.42, 0, 0]} scale={[0.58, 0.15, 0.035]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="#6759a5" metalness={0.4} roughness={0.38} emissive="#30255e" emissiveIntensity={0.55} />
+      </mesh>
+      <mesh position={[0.42, 0, 0]} scale={[0.58, 0.15, 0.035]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="#6759a5" metalness={0.4} roughness={0.38} emissive="#30255e" emissiveIntensity={0.55} />
+      </mesh>
+      <mesh position={[0, 0, 0.22]}>
+        <sphereGeometry args={[0.06, 20, 20]} />
+        <meshStandardMaterial color="#f3d18a" emissive="#f3d18a" emissiveIntensity={decoding ? 5 : 2} />
+      </mesh>
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.42, 0.009, 8, 64]} />
+        <meshBasicMaterial color="#f3d18a" transparent opacity={active || decoding ? 0.8 : 0.34} />
+      </mesh>
+      <mesh rotation={[Math.PI / 2, 0, 0]} scale={1.45}>
+        <torusGeometry args={[0.42, 0.006, 8, 64]} />
+        <meshBasicMaterial color="#c9b7ff" transparent opacity={decoding ? 0.32 : 0.12} />
+      </mesh>
+    </group>
+  );
+}
+
+function SignalNode({
+  id,
+  position,
+  active,
+  decoded,
+  decoding,
+  onSelect,
+}: {
+  id: SignalId;
+  position: [number, number, number];
+  active: boolean;
+  decoded: boolean;
+  decoding: boolean;
+  onSelect: () => void;
+}) {
+  const ref = useRef<THREE.Group>(null);
+  const item = signalContent[id];
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime();
+    ref.current.position.y = position[1] + Math.sin(t * 1.4 + position[0]) * 0.045;
+    const target = active || decoding ? 1.2 : 1;
+    ref.current.scale.lerp(new THREE.Vector3(target, target, target), 0.1);
   });
 
   return (
     <group
       ref={ref}
-      position={[-1.1, -1.25, 0.2]}
+      position={position}
       onClick={(event) => { event.stopPropagation(); onSelect(); }}
       onPointerOver={(event) => { event.stopPropagation(); document.body.style.cursor = "pointer"; }}
       onPointerOut={() => { document.body.style.cursor = "default"; }}
     >
-      <mesh position={[0, -0.15, 0]}>
-        <cylinderGeometry args={[0.72, 0.82, 0.16, 48]} />
-        <meshStandardMaterial color="#17151f" metalness={0.8} roughness={0.28} />
-      </mesh>
-      <mesh position={[0, 0.25, 0]}>
-        <boxGeometry args={[0.75, 0.5, 0.52]} />
-        <meshStandardMaterial color="#d9d2dc" metalness={0.35} roughness={0.45} />
-      </mesh>
-      <mesh position={[0, 0.43, 0.27]}>
-        <boxGeometry args={[0.72, 0.035, 0.012]} />
-        <meshBasicMaterial color="#e88952" />
-      </mesh>
-      <mesh position={[0, 0.39, 0.27]}>
-        <boxGeometry args={[0.72, 0.035, 0.012]} />
-        <meshBasicMaterial color="#f4f1e9" />
-      </mesh>
-      <mesh position={[0, 0.35, 0.27]}>
-        <boxGeometry args={[0.72, 0.035, 0.012]} />
-        <meshBasicMaterial color="#78a98a" />
-      </mesh>
-      <group position={[0, 0.72, 0]}>
-        <mesh rotation={[0.25, 0, 0]}>
-          <sphereGeometry args={[0.38, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-          <meshStandardMaterial color="#eeeaf3" metalness={0.65} roughness={0.25} side={THREE.DoubleSide} />
-        </mesh>
-        <mesh position={[0, 0.22, 0.08]} rotation={[Math.PI / 2, 0, 0]}>
-          <sphereGeometry args={[0.055, 20, 20]} />
-          <meshStandardMaterial color="#f1d18b" emissive="#f1b75a" emissiveIntensity={1.4} />
-        </mesh>
-      </group>
-      <mesh position={[0, 1.18, 0]}>
-        <cylinderGeometry args={[0.018, 0.018, 0.55, 12]} />
-        <meshStandardMaterial color="#bcb4c8" metalness={0.8} roughness={0.25} />
-      </mesh>
-      <mesh position={[0, 1.48, 0]}>
-        <sphereGeometry args={[0.045, 20, 20]} />
-        <meshStandardMaterial
-          color={active ? "#f5d27d" : "#8f79b6"}
-          emissive={active ? "#f5b84b" : "#70539d"}
-          emissiveIntensity={active ? 4 : 1.4}
-        />
-      </mesh>
-      <mesh scale={active ? 2.8 : 2}>
-        <sphereGeometry args={[0.22, 24, 24]} />
-        <meshBasicMaterial color="#d9b77b" transparent opacity={active ? 0.1 : 0.035} />
-      </mesh>
-      <mesh rotation={[Math.PI / 2.5, 0.2, 0]}>
-        <torusGeometry args={[0.95, 0.012, 12, 100]} />
-        <meshBasicMaterial color="#d9b77b" transparent opacity={active ? 0.6 : 0.25} />
-      </mesh>
-    </group>
-  );
-}
-
-function MissionPlanet({
-  type,
-  position,
-  active,
-  onSelect,
-}: {
-  type: "earth" | "moon" | "mars";
-  position: [number, number, number];
-  active: boolean;
-  onSelect: () => void;
-}) {
-  const group = useRef<THREE.Group>(null);
-  const radius = type === "earth" ? 0.78 : type === "moon" ? 0.52 : 0.68;
-
-  useFrame((_, delta) => {
-    if (!group.current) return;
-    group.current.rotation.y += delta * (active ? 0.22 : 0.075);
-    const target = active ? 1.18 : 1;
-    group.current.scale.lerp(new THREE.Vector3(target, target, target), 0.08);
-  });
-
-  return (
-    <group
-      ref={group}
-      position={position}
-      onClick={(e) => { e.stopPropagation(); onSelect(); }}
-      onPointerOver={() => { document.body.style.cursor = "pointer"; }}
-      onPointerOut={() => { document.body.style.cursor = "default"; }}
-    >
       <mesh>
-        <sphereGeometry args={[radius, 56, 56]} />
+        <sphereGeometry args={[0.115, 24, 24]} />
         <meshStandardMaterial
-          color={type === "earth" ? "#275c9c" : type === "moon" ? "#a7a9b4" : "#a84f3c"}
-          roughness={0.62}
-          metalness={0.08}
-          emissive={type === "mars" ? "#3e1714" : type === "earth" ? "#101f42" : "#292a32"}
-          emissiveIntensity={active ? 0.55 : 0.2}
+          color={item.accent}
+          emissive={item.accent}
+          emissiveIntensity={active || decoding ? 3.8 : decoded ? 1.6 : 0.8}
         />
       </mesh>
-
-      {type === "earth" && (
-        <>
-          <mesh scale={1.09}>
-            <sphereGeometry args={[radius, 48, 48]} />
-            <meshBasicMaterial color="#78b8ff" transparent opacity={0.11} side={THREE.BackSide} />
-          </mesh>
-          <mesh position={[-0.2, 0.2, 0.67]} scale={[0.34, 0.14, 0.045]}>
-            <sphereGeometry args={[1, 24, 16]} />
-            <meshBasicMaterial color="#6ec47b" transparent opacity={0.78} />
-          </mesh>
-          <mesh position={[0.2, -0.18, 0.69]} scale={[0.24, 0.11, 0.04]}>
-            <sphereGeometry args={[1, 24, 16]} />
-            <meshBasicMaterial color="#70b876" transparent opacity={0.68} />
-          </mesh>
-        </>
-      )}
-
-      {type === "moon" && [
-        [-0.18, 0.12, 0.48, 0.07],
-        [0.12, -0.14, 0.47, 0.055],
-        [0.25, 0.18, 0.44, 0.045],
-        [-0.03, -0.22, 0.45, 0.04],
-      ].map((c, i) => (
-        <mesh key={i} position={[c[0], c[1], c[2]]} scale={c[3]}>
-          <sphereGeometry args={[1, 18, 18]} />
-          <meshBasicMaterial color="#50525d" transparent opacity={0.62} />
-        </mesh>
-      ))}
-
-      {type === "mars" && (
-        <>
-          <mesh position={[0.17, 0.14, 0.59]} scale={[0.32, 0.09, 0.035]}>
-            <sphereGeometry args={[1, 24, 16]} />
-            <meshBasicMaterial color="#d67a64" transparent opacity={0.55} />
-          </mesh>
-          <mesh position={[-0.2, -0.18, 0.58]} scale={[0.2, 0.055, 0.025]}>
-            <sphereGeometry args={[1, 24, 16]} />
-            <meshBasicMaterial color="#723029" transparent opacity={0.5} />
-          </mesh>
-        </>
-      )}
-
-      <mesh scale={active ? 1.52 : 1.3}>
-        <sphereGeometry args={[radius, 32, 32]} />
-        <meshBasicMaterial
-          color={type === "mars" ? "#ff8b70" : type === "earth" ? "#7fc5ff" : "#e2d9ff"}
-          transparent
-          opacity={active ? 0.14 : 0.035}
-          side={THREE.BackSide}
-        />
+      <mesh scale={active || decoding ? 2.4 : 1.65}>
+        <sphereGeometry args={[0.19, 20, 20]} />
+        <meshBasicMaterial color={item.accent} transparent opacity={active || decoding ? 0.13 : 0.045} />
+      </mesh>
+      <mesh rotation={[Math.PI / 2, 0, 0]} scale={active || decoding ? 1.35 : 1}>
+        <torusGeometry args={[0.34, 0.006, 8, 72]} />
+        <meshBasicMaterial color={item.accent} transparent opacity={active ? 0.72 : 0.22} />
+      </mesh>
+      <mesh rotation={[0.6, 0.4, 0.25]}>
+        <torusGeometry args={[0.48, 0.004, 6, 72]} />
+        <meshBasicMaterial color={item.accent} transparent opacity={decoding ? 0.6 : 0.12} />
       </mesh>
     </group>
   );
 }
 
-function MissionSatellite({ active, onSelect }: { active: boolean; onSelect: () => void }) {
-  const ref = useRef<THREE.Group>(null);
+function RadioPulse({ from, to, active }: { from: [number, number]; to: [number, number]; active: boolean }) {
+  const ref = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
     if (!ref.current) return;
-    const t = clock.getElapsedTime();
-    ref.current.rotation.y = t * 0.25;
-    ref.current.rotation.z = Math.sin(t * 0.7) * 0.08;
-    const target = active ? 1.22 : 1;
-    ref.current.scale.lerp(new THREE.Vector3(target, target, target), 0.08);
+    const t = (clock.getElapsedTime() * 0.42) % 1;
+    ref.current.position.x = from[0] + (to[0] - from[0]) * t;
+    ref.current.position.y = from[1] + (to[1] - from[1]) * t;
+    ref.current.scale.setScalar(active ? 1.5 : 0.8);
   });
 
   return (
-    <group ref={ref} position={[2.05, 1.45, 0.6]} onClick={(e) => { e.stopPropagation(); onSelect(); }} onPointerOver={() => { document.body.style.cursor = "pointer"; }} onPointerOut={() => { document.body.style.cursor = "default"; }}>
-      <mesh>
-        <boxGeometry args={[0.28, 0.38, 0.28]} />
-        <meshStandardMaterial color="#c9c2d4" metalness={0.75} roughness={0.24} />
-      </mesh>
-      <mesh position={[-0.34, 0, 0]} scale={[0.48, 0.14, 0.04]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#6558a5" metalness={0.35} roughness={0.4} emissive="#30265d" emissiveIntensity={0.5} />
-      </mesh>
-      <mesh position={[0.34, 0, 0]} scale={[0.48, 0.14, 0.04]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#6558a5" metalness={0.35} roughness={0.4} emissive="#30265d" emissiveIntensity={0.5} />
-      </mesh>
-      <mesh position={[0, 0, 0.2]}>
-        <sphereGeometry args={[0.055, 20, 20]} />
-        <meshStandardMaterial color="#f3d18a" emissive="#f3d18a" emissiveIntensity={2} />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.33, 0.008, 8, 48]} />
-        <meshBasicMaterial color="#d9b77b" transparent opacity={active ? 0.9 : 0.42} />
-      </mesh>
-    </group>
-  );
-}
-
-function MissionAsteroid({ active, onSelect }: { active: boolean; onSelect: () => void }) {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame((_, delta) => {
-    if (!ref.current) return;
-    ref.current.rotation.x += delta * 0.18;
-    ref.current.rotation.y += delta * 0.23;
-    const target = active ? 1.28 : 1;
-    ref.current.scale.lerp(new THREE.Vector3(target, target, target), 0.08);
-  });
-
-  return (
-    <mesh ref={ref} position={[-2.05, 1.35, 0.7]} onClick={(e) => { e.stopPropagation(); onSelect(); }} onPointerOver={() => { document.body.style.cursor = "pointer"; }} onPointerOut={() => { document.body.style.cursor = "default"; }}>
-      <icosahedronGeometry args={[0.28, 1]} />
-      <meshStandardMaterial color="#77717c" roughness={0.95} metalness={0.05} emissive="#29232f" emissiveIntensity={active ? 0.45 : 0.15} />
+    <mesh ref={ref} visible={active}>
+      <sphereGeometry args={[0.045, 12, 12]} />
+      <meshBasicMaterial color="#f3d18a" />
     </mesh>
   );
 }
 
-function MissionSpacecraft({ selected, onSelect }: { selected: MissionObject; onSelect: () => void }) {
-  const ship = useRef<THREE.Group>(null);
-  const targets: Record<MissionObject, [number, number]> = {
-    isro: [-0.2, -0.4],
-    earth: [-2.8, -0.45],
-    moon: [0.0, 0.65],
-    mars: [2.7, -0.25],
-    satellite: [1.65, 1.15],
-    asteroid: [-1.6, 1.05],
-    ship: [0.35, -1.05],
+function SignalWorld({ active, decoded, decoding, onSelect }: {
+  active: SignalId;
+  decoded: SignalId[];
+  decoding: SignalId | null;
+  onSelect: (id: SignalId) => void;
+}) {
+  const positions: Record<SignalId, [number, number, number]> = {
+    origin: [-2.7, 0.95, 0.3],
+    distance: [2.65, 0.95, 0.2],
+    frequency: [-2.5, -1.25, 0.35],
+    unknown: [2.55, -1.15, 0.15],
   };
 
-  useFrame(({ clock }) => {
-    if (!ship.current) return;
-    const [tx, ty] = targets[selected];
-    ship.current.position.x += (tx - ship.current.position.x) * 0.045;
-    ship.current.position.y += (ty - ship.current.position.y) * 0.045;
-    ship.current.position.y += Math.sin(clock.getElapsedTime() * 2.2) * 0.0012;
-    ship.current.rotation.z = Math.sin(clock.getElapsedTime() * 1.2) * 0.035;
-  });
+  const center: [number, number, number] = [0, 0, 0.5];
 
-  return (
-    <group ref={ship} position={targets[selected].concat([0.9]) as [number, number, number]} scale={0.58} onClick={(e) => { e.stopPropagation(); onSelect(); }} onPointerOver={() => { document.body.style.cursor = "pointer"; }} onPointerOut={() => { document.body.style.cursor = "default"; }}>
-      <mesh>
-        <capsuleGeometry args={[0.13, 0.76, 8, 20]} />
-        <meshStandardMaterial color="#eeeaf3" metalness={0.6} roughness={0.25} />
-      </mesh>
-      <mesh position={[0, 0.18, 0.12]} rotation={[Math.PI / 2, 0, 0]}>
-        <sphereGeometry args={[0.11, 24, 24]} />
-        <meshStandardMaterial color="#8f79b6" emissive="#8f79b6" emissiveIntensity={1.1} />
-      </mesh>
-      <mesh position={[0, -0.12, 0]} scale={[0.55, 0.15, 0.07]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#6d5a82" metalness={0.75} roughness={0.28} />
-      </mesh>
-      <mesh position={[0, -0.53, 0]}>
-        <coneGeometry args={[0.09, 0.34, 16]} />
-        <meshStandardMaterial color="#ffe0a0" emissive="#ff8b32" emissiveIntensity={3} />
-      </mesh>
-    </group>
-  );
-}
-
-function DestinationWorld({ selected, onSelect }: { selected: MissionObject; onSelect: (name: MissionObject) => void }) {
   return (
     <>
-      <ambientLight intensity={0.22} />
-      <pointLight position={[2, 4, 5]} intensity={10} color="#e7dcff" />
-      <pointLight position={[-4, -2, 2]} intensity={5} color="#c989bd" />
-      <pointLight position={[0, 2, -3]} intensity={4} color="#f3d18a" />
+      <ambientLight intensity={0.24} />
+      <pointLight position={[0, 2.5, 4]} intensity={9} color="#e9e0ff" />
+      <pointLight position={[-4, -2, 3]} intensity={4} color="#c987bd" />
+      <pointLight position={[4, -1, 2]} intensity={4} color="#8fa9ff" />
       <StarField />
 
       <mesh rotation={[0.25, 0.15, 0]}>
-        <torusGeometry args={[2.85, 0.012, 12, 180]} />
-        <meshBasicMaterial color="#d9b77b" transparent opacity={0.22} />
+        <torusGeometry args={[2.75, 0.012, 12, 180]} />
+        <meshBasicMaterial color="#d9b77b" transparent opacity={0.18} />
       </mesh>
-      <mesh rotation={[1.1, -0.35, 0.2]}>
-        <torusGeometry args={[3.35, 0.008, 12, 180]} />
-        <meshBasicMaterial color="#c9b7ff" transparent opacity={0.16} />
+      <mesh rotation={[1.05, -0.35, 0.2]}>
+        <torusGeometry args={[3.25, 0.008, 12, 180]} />
+        <meshBasicMaterial color="#c9b7ff" transparent opacity={0.13} />
       </mesh>
 
-      <MissionOriginStation
-        active={selected === "isro"}
-        onSelect={() => onSelect("isro")}
-      />
+      <SignalSatellite active={active !== "unknown"} decoding={!!decoding} />
 
-      <MissionPlanet type="earth" position={[-3.0, -0.45, 0]} active={selected === "earth"} onSelect={() => onSelect("earth")} />
-      <MissionPlanet type="moon" position={[0, 1.0, 0]} active={selected === "moon"} onSelect={() => onSelect("moon")} />
-      <MissionPlanet type="mars" position={[3.0, -0.2, 0]} active={selected === "mars"} onSelect={() => onSelect("mars")} />
-      <MissionSatellite active={selected === "satellite"} onSelect={() => onSelect("satellite")} />
-      <MissionAsteroid active={selected === "asteroid"} onSelect={() => onSelect("asteroid")} />
-      <MissionSpacecraft selected={selected} onSelect={() => onSelect("ship")} />
+      {(Object.keys(positions) as SignalId[]).map((id) => (
+        <SignalNode
+          key={id}
+          id={id}
+          position={positions[id]}
+          active={active === id}
+          decoded={decoded.includes(id)}
+          decoding={decoding === id}
+          onSelect={() => onSelect(id)}
+        />
+      ))}
+
+      {(Object.keys(positions) as SignalId[]).map((id) => (
+        <RadioPulse
+          key={`pulse-${id}`}
+          from={center.slice(0, 2) as [number, number]}
+          to={positions[id].slice(0, 2) as [number, number]}
+          active={active === id || decoding === id}
+        />
+      ))}
     </>
   );
 }
 
-function SceneThree() {
-  const [selected, setSelected] = useState<MissionObject>("isro");
-  const [originOpened, setOriginOpened] = useState(false);
-  const content = missionContent[selected];
+function SceneThree({ onContinue }: { onContinue: () => void }) {
+  const [active, setActive] = useState<SignalId>("origin");
+  const [decoded, setDecoded] = useState<SignalId[]>([]);
+  const [decoding, setDecoding] = useState<SignalId | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  const current = signalContent[active];
+  const allDecoded = decoded.length === 4;
+
+  const decodeSignal = (id: SignalId) => {
+    setActive(id);
+    if (decoding || decoded.includes(id)) return;
+
+    setDecoding(id);
+    setProgress(0);
+    let value = 0;
+    const timer = window.setInterval(() => {
+      value += 10;
+      setProgress(value);
+      if (value >= 100) {
+        window.clearInterval(timer);
+        setDecoded((previous) => previous.includes(id) ? previous : [...previous, id]);
+        setDecoding(null);
+      }
+    }, 55);
+  };
 
   return (
-    <motion.main className="destination-page destination-page-explorer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
-      <div className="destination-nebula destination-nebula-one" />
-      <div className="destination-nebula destination-nebula-two" />
+    <motion.main
+      className="signal-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <div className="signal-nebula signal-nebula-one" />
+      <div className="signal-nebula signal-nebula-two" />
+      <div className="signal-grid" />
 
-      <header className="destination-header">
-        <div><span className="destination-status-dot" /> MISSION 03</div>
-        <strong>NEXT DESTINATION</strong>
-        <div>SUS-03 / EXPLORATION</div>
+      <header className="signal-header">
+        <div className="signal-status"><span /> MISSION 03 / SIGNAL DECODING</div>
+        <strong>SUS-03</strong>
+        <div>{decoded.length.toString().padStart(2, "0")} / 04 DECODED</div>
       </header>
 
-      <section className="destination-copy destination-explorer-copy">
-        <span>{selected === "isro" ? "✦ MISSION ORIGIN · INDIA ✦" : "✦ CHOOSE YOUR NEXT STOP ✦"}</span>
-        <h2>
-          {selected === "isro" ? <>WHERE<br /><em>WE</em><br />MET.</> : <>THE<br /><em>JOURNEY</em><br />AHEAD.</>}
-        </h2>
-        <p>
-          {selected === "isro"
-            ? "Before the next destination, remember where this mission really began."
-            : "There is more than one way forward. Explore the objects around the spacecraft."}
-        </p>
+      <section className="signal-intro">
+        <span>✦ INCOMING TRANSMISSION ✦</span>
+        <h2>CHOOSE A<br /><em>SIGNAL.</em></h2>
+        <p>Not every story needs a destination. Some of it arrives as a signal.</p>
       </section>
 
-      <div className="destination-instruction">
-        <span className="destination-instruction-dot" />
-        {selected === "isro"
-          ? "CLICK THE ISRO ORIGIN TO REVISIT THE FIRST MEETING"
-          : "CLICK DIFFERENT OBJECTS TO EXPLORE"}
-      </div>
+      <div className="signal-route-label signal-route-label-top">01 — 02</div>
+      <div className="signal-route-label signal-route-label-bottom">03 — 04</div>
 
-      <div className="destination-canvas destination-explorer-canvas">
-        <Canvas camera={{ position: [0, 0, 8], fov: 43 }} dpr={[1, 1.8]} gl={{ antialias: true, alpha: true }}>
-          <DestinationWorld selected={selected} onSelect={setSelected} />
+      <div className="signal-canvas">
+        <Canvas camera={{ position: [0, 0, 8], fov: 42 }} dpr={[1, 1.8]} gl={{ antialias: true, alpha: true }}>
+          <SignalWorld active={active} decoded={decoded} decoding={decoding} onSelect={decodeSignal} />
         </Canvas>
       </div>
 
-      <motion.div key={selected} className="destination-info destination-explorer-info" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }}>
-        <span>{content.label}</span>
-        <h3>{content.title}</h3>
-        <p>{content.text}</p>
-      </motion.div>
+      <div className="signal-node-labels" aria-hidden="true">
+        <span className="signal-label-one">01 / WE FIRST MET</span>
+        <span className="signal-label-two">02 / THE GAP</span>
+        <span className="signal-label-three">03 / WE STARTED TALKING</span>
+        <span className="signal-label-four">04 / THE PLACES</span>
+      </div>
 
-      <div className="destination-object-list">
-        {(["isro", "earth", "moon", "mars", "satellite", "asteroid", "ship"] as MissionObject[]).map((item, index) => (
-          <button key={item} className={selected === item ? "active" : ""} onClick={() => setSelected(item)}>
-            <span>0{index + 1}</span>
-            {item === "isro" ? "ISRO" : item === "satellite" ? "SATELLITE" : item === "asteroid" ? "ASTEROID" : item.toUpperCase()}
+      <motion.aside
+        key={active}
+        className="signal-console"
+        initial={{ opacity: 0, x: 18 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="signal-console-top">
+          <span>{current.label}</span>
+          <strong>{current.number}</strong>
+        </div>
+        <div className="signal-console-status">
+          <span className={decoding === active ? "is-decoding" : decoded.includes(active) ? "is-decoded" : ""} />
+          {decoding === active ? `SCANNING ${progress}%` : decoded.includes(active) ? "SIGNAL DECODED" : "SIGNAL DETECTED"}
+        </div>
+        <h3>{current.title}</h3>
+        <p>{current.text}</p>
+        <div className="signal-telemetry">
+          <span>{current.telemetry}</span>
+          <i><b style={{ width: `${decoding === active ? progress : decoded.includes(active) ? 100 : 16}%` }} /></i>
+        </div>
+        <button
+          type="button"
+          onClick={() => decodeSignal(active)}
+          disabled={!!decoding || decoded.includes(active)}
+        >
+          {decoding === active ? "DECODING..." : decoded.includes(active) ? "DECODED ✓" : "DECODE SIGNAL →"}
+        </button>
+      </motion.aside>
+
+      <div className="signal-progress">
+        {(Object.keys(signalContent) as SignalId[]).map((id) => (
+          <button
+            key={id}
+            type="button"
+            className={`${active === id ? "active" : ""} ${decoded.includes(id) ? "decoded" : ""}`}
+            onClick={() => setActive(id)}
+            aria-label={`Signal ${signalContent[id].number}`}
+          >
+            <span>{signalContent[id].number}</span>
           </button>
         ))}
       </div>
 
       <AnimatePresence>
-        {originOpened && (
+        {allDecoded && (
           <motion.div
-            className="isro-memory-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setOriginOpened(false)}
+            className="signal-complete"
+            initial={{ opacity: 0, y: 18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.65 }}
           >
-            <motion.div
-              className="isro-memory-card"
-              initial={{ opacity: 0, scale: 0.88, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 20 }}
-              transition={{ duration: 0.5 }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="isro-memory-topline">
-                <span>FIRST CONTACT</span>
-                <span>ISRO · INDIA</span>
-              </div>
-              <div className="isro-memory-symbol">✦</div>
-              <h3>
-                WHERE OUR<br />
-                <em>ORBITS</em><br />
-                FIRST CROSSED
-              </h3>
-              <p>
-                Of all the places we could have met, we met where people dream
-                about reaching the stars.
-              </p>
-              <div className="isro-memory-line" />
-              <span className="isro-memory-note">A MEMORY FROM THE BEGINNING</span>
-              <button onClick={() => setOriginOpened(false)}>
-                RETURN TO ORBIT →
-              </button>
-            </motion.div>
+            <span>TRANSMISSION COMPLETE</span>
+            <strong>ALL SIGNALS DECODED</strong>
+            <p>Maybe we crossed paths for a reason.<br />Oh, and by the way... thanks for all the treats. 😌</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="destination-footer">
+      <AnimatePresence>
+        {allDecoded && (
+          <motion.button
+            type="button"
+            className="signal-next-scene-button"
+            onClick={onContinue}
+            initial={{ opacity: 0, y: 18, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.15, duration: 0.45 }}
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <span>NEXT DESTINATION</span>
+            <strong>MEMORY ARCHIVE <b>→</b></strong>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <div className="signal-footer">
         <span>03 / 07</span>
-        <div><b /> <b /> <b /></div>
-        <span>EXPLORE / DISCOVER / CONTINUE</span>
+        <div><b /><b /><b /><b /></div>
+        <span>{allDecoded ? "NEXT DESTINATION / MEMORY ARCHIVE" : "SCAN / DECODE / DISCOVER"}</span>
       </div>
+    </motion.main>
+  );
+}
+
+
+/* ─────────────────────────────────────────────
+   SCENE 4 — MEMORY ARCHIVE
+───────────────────────────────────────────── */
+
+type MemoryItem = {
+  id: number;
+  number: string;
+  title: string;
+  caption: string;
+  image: string;
+  position: string;
+};
+
+const memoryItems: MemoryItem[] = [
+  { id: 1, number: "01", title: "THE FIRST FRAME", caption: "Some memories begin before you realise they will matter.", image: "/memories/memory-01.jpg", position: "memory-card-one" },
+  { id: 2, number: "02", title: "A DAY TO REMEMBER", caption: "A little moment, captured and saved beyond the timeline.", image: "/memories/memory-02.jpg", position: "memory-card-two" },
+  { id: 3, number: "03", title: "OUTSIDE THE ORBIT", caption: "Different places. Different skies. Still part of the same journey.", image: "/memories/memory-03.jpg", position: "memory-card-three" },
+  { id: 4, number: "04", title: "THE LITTLE THINGS", caption: "The random moments somehow become the ones you remember most.", image: "/memories/memory-04.jpg", position: "memory-card-four" },
+  { id: 5, number: "05", title: "ANOTHER MEMORY", caption: "A frame from somewhere along the way.", image: "/memories/memory-05.jpg", position: "memory-card-five" },
+  { id: 6, number: "06", title: "STILL IN ORBIT", caption: "Some memories don't really leave. They just keep orbiting.", image: "/memories/memory-06.jpg", position: "memory-card-six" },
+];
+
+function MemoryCard({ item, active, onSelect }: { item: MemoryItem; active: boolean; onSelect: () => void }) {
+  return (
+    <motion.button
+      type="button"
+      className={`memory-card ${item.position} ${active ? "memory-card--active" : ""}`}
+      onClick={onSelect}
+      whileTap={{ scale: 0.97 }}
+      aria-label={`Open memory ${item.number}: ${item.title}`}
+    >
+      <span className="memory-card-glow" />
+      <span className="memory-card-image">
+        <img src={item.image} alt="" onError={(event) => { event.currentTarget.style.opacity = "0"; }} />
+        <span className="memory-image-placeholder">ADD PHOTO</span>
+      </span>
+      <span className="memory-card-top"><b>{item.number}</b><i>ARCHIVE</i></span>
+      <span className="memory-card-bottom">{item.title}</span>
+    </motion.button>
+  );
+}
+
+function MemoryArchiveWorld() {
+  const ref = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    ref.current.rotation.y = Math.sin(clock.getElapsedTime() * 0.18) * 0.025;
+    ref.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.12) * 0.018;
+  });
+
+  return (
+    <>
+      <ambientLight intensity={0.22} />
+      <pointLight position={[4, 3, 5]} intensity={9} color="#d9cbff" />
+      <pointLight position={[-4, -2, 3]} intensity={4} color="#e8a9c8" />
+      <pointLight position={[0, 2, -4]} intensity={3} color="#f3d18a" />
+      <StarField />
+      <group ref={ref}>
+        <mesh rotation={[0.55, 0.2, 0.1]}>
+          <torusGeometry args={[2.65, 0.012, 12, 180]} />
+          <meshBasicMaterial color="#d9b77b" transparent opacity={0.3} />
+        </mesh>
+        <mesh rotation={[1.15, -0.3, 0.2]}>
+          <torusGeometry args={[3.25, 0.008, 12, 180]} />
+          <meshBasicMaterial color="#c9b7ff" transparent opacity={0.18} />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.5, 48, 48]} />
+          <meshStandardMaterial color="#241844" emissive="#120b29" emissiveIntensity={0.9} metalness={0.25} roughness={0.5} />
+        </mesh>
+        <mesh scale={1.35}>
+          <sphereGeometry args={[0.5, 32, 32]} />
+          <meshBasicMaterial color="#c9b7ff" transparent opacity={0.07} side={THREE.BackSide} />
+        </mesh>
+        <Float speed={0.8} floatIntensity={0.25} rotationIntensity={0.15}>
+          <Flower position={[-0.5, 0.38, 0.55]} scale={0.48} />
+          <Flower position={[0.48, -0.34, 0.55]} scale={0.38} />
+        </Float>
+      </group>
+    </>
+  );
+}
+
+function SceneFour({ onContinue }: { onContinue: () => void }) {
+  const [selected, setSelected] = useState<number | null>(null);
+  const current = selected ? memoryItems.find((item) => item.id === selected) : null;
+
+  return (
+    <motion.main className="memory-archive-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
+      <div className="memory-archive-nebula memory-archive-nebula-one" />
+      <div className="memory-archive-nebula memory-archive-nebula-two" />
+      <div className="memory-archive-stars" aria-hidden="true">
+        {Array.from({ length: 70 }).map((_, index) => (
+          <span key={index} style={{ left: `${(index * 47.3) % 100}%`, top: `${(index * 71.1) % 100}%`, animationDelay: `${(index % 8) * 0.5}s` }} />
+        ))}
+      </div>
+
+      <header className="memory-archive-header">
+        <div><span /> MISSION 04 / MEMORY ARCHIVE</div>
+        <strong>SUS-04</strong>
+        <div>{selected ? "MEMORY OPEN" : "ARCHIVE ONLINE"}</div>
+      </header>
+
+      <section className="memory-archive-intro">
+        <span>✦ PERSONAL ARCHIVE / VISUAL MEMORY ✦</span>
+        <h2>THE MOMENTS<br /><em>WE KEEP.</em></h2>
+        <p>Some moments are too good to leave behind. Tap a frame and bring it back into focus.</p>
+      </section>
+
+      <div className="memory-archive-canvas">
+        <Canvas camera={{ position: [0, 0, 7.5], fov: 42 }} dpr={[1, 1.6]} gl={{ antialias: true, alpha: true }}>
+          <MemoryArchiveWorld />
+        </Canvas>
+      </div>
+
+      <div className="memory-orbit-line memory-orbit-line-one" />
+      <div className="memory-orbit-line memory-orbit-line-two" />
+
+      <div className="memory-card-field">
+        {memoryItems.map((item) => <MemoryCard key={item.id} item={item} active={selected === item.id} onSelect={() => setSelected(item.id)} />)}
+      </div>
+
+      <AnimatePresence>
+        {current && (
+          <motion.div className="memory-detail" initial={{ opacity: 0, y: 25, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15 }}>
+            <button className="memory-detail-close" type="button" onClick={() => setSelected(null)}>×</button>
+            <span>MEMORY {current.number} / ARCHIVED FRAME</span>
+            <h3>{current.title}</h3>
+            <p>{current.caption}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="memory-archive-hint">{selected ? "FRAME LOCKED / MEMORY RESTORED" : "SELECT A MEMORY FRAME"}</div>
+
+      <motion.button className="memory-next-button" type="button" onClick={onContinue} whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+        <span>OPEN THE TRANSMISSION</span><b>→</b>
+      </motion.button>
+
+      <div className="memory-archive-footer"><span>04 / 07</span><div><b className="active" /><b /><b /><b /><b /><b /><b /></div><span>MEMORY ARCHIVE / PERSONAL LOG</span></div>
     </motion.main>
   );
 }
@@ -1342,7 +1409,7 @@ const decorativeStars = Array.from(
 ───────────────────────────────────────────── */
 
 export default function Home() {
-  const [scene, setScene] = useState<1 | 2 | 3>(1);
+  const [scene, setScene] = useState<1 | 2 | 3 | 4>(1);
   const [launched, setLaunched] = useState(false);
 
   const handleLaunch = () => {
@@ -1582,8 +1649,10 @@ export default function Home() {
           key="scene-two"
           onContinue={() => setScene(3)}
         />
+      ) : scene === 3 ? (
+        <SceneThree key="scene-three" onContinue={() => setScene(4)} />
       ) : (
-        <SceneThree key="scene-three" />
+        <SceneFour key="scene-four" onContinue={() => {}} />
       )}
     </AnimatePresence>
   );
